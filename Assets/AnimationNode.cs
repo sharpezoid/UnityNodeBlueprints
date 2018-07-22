@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
+
 public class AnimationNode : Node
 {
     public AnimationClip clip;
@@ -16,7 +17,7 @@ public class AnimationNode : Node
         nodeHeight = 50;
 
         NodeUnscaledPosition = new Rect(nodeWidth, nodeHeight, nodeWidth * toolWindow.scale, nodeHeight * toolWindow.scale);
-      
+
         color = Color.white;
     }
 }
