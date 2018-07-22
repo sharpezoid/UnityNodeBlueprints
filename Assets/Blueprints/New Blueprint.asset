@@ -12,19 +12,33 @@ MonoBehaviour:
   m_Name: New Blueprint
   m_EditorClassIdentifier: 
   nodes:
-  - color: {r: 0.6132076, g: 0.17644179, b: 0.17644179, a: 0}
+  - color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    sizeDelta: {x: 100, y: 100}
     position:
       serializedVersion: 2
-      x: 0
-      y: 0
-      width: 0
-      height: 0
-    nodeComment: 
-  - color: {r: 0, g: 0, b: 0, a: 1}
+      x: 96
+      y: 98
+      width: 100
+      height: 100
+    clickDelta: {x: 0, y: 0}
+    nodeComment: Write Node Comment Here...
+  - color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    sizeDelta: {x: 100, y: 100}
     position:
       serializedVersion: 2
-      x: 0
-      y: 0
-      width: 0
-      height: 0
-    nodeComment: 
+      x: 984
+      y: 252
+      width: 100
+      height: 100
+    clickDelta: {x: 0, y: 0}
+    nodeComment: Write Node Comment Here...
+  - color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    sizeDelta: {x: 100, y: 100}
+    position:
+      serializedVersion: 2
+      x: 114
+      y: 413
+      width: 100
+      height: 100
+    clickDelta: {x: 0, y: 0}
+    nodeComment: Write Node Comment Here...

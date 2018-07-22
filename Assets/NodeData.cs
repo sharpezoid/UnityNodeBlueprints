@@ -6,10 +6,12 @@ public class NodeData
 {
     public enum NodeType
     {
-        None,
-        Physics,
-        Animation,
-        Position,
+        Comment,
+        Event,
+        Variable,
+        Function,
+        Debug,
+
         COUNT
     }
 }

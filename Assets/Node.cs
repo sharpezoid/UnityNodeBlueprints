@@ -7,29 +7,30 @@ using UnityEditor;
 [System.Serializable]
 public class Node
 {
-    const float NODE_HEIGHT_PER_VARIABLE = 20.0f;       // -- how much distance for each variable 
+    // -- THIS NODE TYPE
+    public NodeData.NodeType nodeType = NodeData.NodeType.Debug;
 
+    // -- COLOR OF THIS NODE
     public Color color = Color.grey;
 
-    // -- create texture for use in drawing this node...
+    // -- TEXTURE FOR RENDERING NODE
     Texture2D texture;
 
-    //[HideInInspector]
+    [HideInInspector]
     public Vector2 sizeDelta = new Vector2(100, 100);
-    public Rect position;
 
     [HideInInspector]
-    public Vector2 clickDelta;      // -- How much offset is there when this is clicked or dragged to the position of the mouse
+    public Rect position;
+
+    public List<NodeInput> inputs;
+    public List<NodeOutput> outputs;
+
 
     public Node(Vector2 _pos)
     {
         position = new Rect(_pos, sizeDelta);
     }
 
-    //void OnEnable()
-    //{
-    //    texture = new Texture2D(1, 1);
-    //}
 
     // -- editable comment on the node
     public string nodeComment = "Write Node Comment Here...";
@@ -46,6 +47,7 @@ public class Node
     {
         isDisplayingComment = false;
     }
+
 
     // -- node selection toggle
     private bool isSelected = false;
@@ -71,20 +73,17 @@ public class Node
         isDisplayingComment = false;
     }
 
-    public List<NodeConnection> connections = new List<NodeConnection>();
 
-    public class NodeConnection
-    {
-        public int targetNodeIndex = 0;
-        public float m_fCurrentNodeExitTime = 0.0f;
-        public float m_fNewNodeEnterTime = 0.5f;
-        public float m_fTransitionDuration = 0.4f;
+    //public List<NodeConnection> connections = new List<NodeConnection>();
+    //public class NodeConnection
+    //{
+    //    public int targetNodeIndex = 0;
         
-        public NodeConnection(int newIndex)
-        {
-            targetNodeIndex = newIndex;
-        }
-    }
+    //    public NodeConnection(int newIndex)
+    //    {
+    //        targetNodeIndex = newIndex;
+    //    }
+    //}
 
     public virtual void Draw()
     {

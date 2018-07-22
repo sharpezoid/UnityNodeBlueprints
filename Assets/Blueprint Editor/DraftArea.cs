@@ -25,7 +25,7 @@ public class DraftArea : EditorWindow
         DragginNodes,
         COUNT
     }
-    public DraftState draftState = DraftState.Default;
+    public DraftState draftState = DraftState.Default; 
 
     public void Draw()
     {
@@ -41,7 +41,10 @@ public class DraftArea : EditorWindow
             draftState = DraftState.AddingNode;
 
             GenericMenu menu = new GenericMenu();
-            menu.AddItem(new GUIContent("ADD NEW NODE"), false, CreateNewNode);
+            for (int i = 0; i < (int)NodeData.NodeType.COUNT; i++)
+            {
+                menu.AddItem(new GUIContent(((NodeData.NodeType)i).ToString()), false, AddNodeCallback, (NodeData.NodeType)i);
+            }
             menu.ShowAsContext();
         }
 
@@ -169,12 +172,33 @@ public class DraftArea : EditorWindow
     }
 
 
-    void CreateNewNode()
+    void AddNodeCallback(object userData)
     {
-        
-        m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
-         
-        // -- Return to normal with the new node created...
+        NodeData.NodeType _type = (NodeData.NodeType)userData;
+
+        switch (_type)
+        {
+            case NodeData.NodeType.Comment:
+                m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+                break;
+
+            case NodeData.NodeType.Debug:
+                m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+                break;
+
+            case NodeData.NodeType.Event:
+                m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+                break;
+
+            case NodeData.NodeType.Function:
+                m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+                break;
+
+            case NodeData.NodeType.Variable:
+                m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+                break;
+        }
+
         draftState = DraftState.Default;
     }
 

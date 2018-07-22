@@ -61,20 +61,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\AnimationNode.cs" />
     <Compile Include="Assets\Blueprint Editor\DraftArea.cs" />
     <Compile Include="Assets\Blueprint Editor\MenuBar.cs" />
     <Compile Include="Assets\Blueprint.cs" />
     <Compile Include="Assets\BlueprintEditor.cs" />
-    <Compile Include="Assets\Move.cs" />
     <Compile Include="Assets\Node.cs" />
     <Compile Include="Assets\NodeData.cs" />
     <Compile Include="Assets\NodeInput.cs" />
     <Compile Include="Assets\NodeOutput.cs" />
     <Compile Include="Assets\ParticipantsNode.cs" />
-    <Compile Include="Assets\PhysicsNode.cs" />
-    <Compile Include="Assets\PositionNode.cs" />
-    <Compile Include="Assets\ToolWindow.cs" />
     <Compile Include="Assets\VariableNode.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/Matt/Documents/GitHub/UnityNodeBlueprints/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
