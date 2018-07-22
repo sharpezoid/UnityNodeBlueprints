@@ -10,7 +10,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>
     </RootNamespace>
-    <ProjectGuid>{E56BC6E3-A096-7BE4-3092-5CAAEEE7E294}</ProjectGuid>
+    <ProjectGuid>{B0D98709-8713-0755-1039-0D18A033CFC9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AnimationNode.cs" />
+    <Compile Include="Assets\Blueprint Editor\DraftArea.cs" />
+    <Compile Include="Assets\Blueprint Editor\MenuBar.cs" />
     <Compile Include="Assets\Blueprint.cs" />
     <Compile Include="Assets\BlueprintEditor.cs" />
     <Compile Include="Assets\Move.cs" />
@@ -75,10 +77,10 @@
     <Compile Include="Assets\ToolWindow.cs" />
     <Compile Include="Assets\VariableNode.cs" />
     <Reference Include="UnityEditor.StandardEvents">
-      <HintPath>C:/Users/Matt/Desktop/ToolUpdate/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+      <HintPath>C:/Users/Matt/Documents/GitHub/UnityNodeBlueprints/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>C:/Users/Matt/Desktop/ToolUpdate/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>C:/Users/Matt/Documents/GitHub/UnityNodeBlueprints/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

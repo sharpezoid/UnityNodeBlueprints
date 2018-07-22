@@ -12,12 +12,24 @@ public class Node
     public Color color = Color.grey;
 
     // -- create texture for use in drawing this node...
-    Texture2D texture = new Texture2D(1, 1);
+    Texture2D texture;
+
+    //[HideInInspector]
+    public Vector2 sizeDelta = new Vector2(100, 100);
+    public Rect position;
 
     [HideInInspector]
-    public Rect position = new Rect(100, 100, 100, 100);
+    public Vector2 clickDelta;      // -- How much offset is there when this is clicked or dragged to the position of the mouse
 
-    public Node(){}
+    public Node(Vector2 _pos)
+    {
+        position = new Rect(_pos, sizeDelta);
+    }
+
+    //void OnEnable()
+    //{
+    //    texture = new Texture2D(1, 1);
+    //}
 
     // -- editable comment on the node
     public string nodeComment = "Write Node Comment Here...";
@@ -76,12 +88,17 @@ public class Node
 
     public virtual void Draw()
     {
+        if (!texture)
+        {
+            texture = new Texture2D(1, 1);
+        }
+
         // -- DRAW DROP SHADOW
         texture.SetPixel(0, 0, new Color(0.1f, 0.1f, 0.1f, 0.15f));
         texture.Apply();
         GUI.DrawTexture(new Rect(position.x + 3, position.y + 3, position.width, position.height), texture);
 
-        // -- DRAW THE OUTLINE  /W or WO selection
+        // -- DRAW THE OUTLINE  W/WO selection
         if (IsSelected)
         {
             texture.SetPixel(0, 0, Color.yellow);

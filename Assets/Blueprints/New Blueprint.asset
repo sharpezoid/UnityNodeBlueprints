@@ -11,4 +11,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5478083b8d2842f4288cdac697511625, type: 3}
   m_Name: New Blueprint
   m_EditorClassIdentifier: 
-  nodes: []
+  nodes:
+  - color: {r: 0.6132076, g: 0.17644179, b: 0.17644179, a: 0}
+    position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    nodeComment: 
+  - color: {r: 0, g: 0, b: 0, a: 1}
+    position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    nodeComment: 

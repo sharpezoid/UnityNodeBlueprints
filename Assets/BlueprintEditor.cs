@@ -2,82 +2,91 @@
 using UnityEditor;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 public class BlueprintEditor : EditorWindow
 {
-    // -- OUR COLLECTION OF BLUEPRINTS
-    static Dictionary<string, Blueprint> blueprints = new Dictionary<string, Blueprint>();
-    Blueprint currentBlueprint;
+    // -- OUR CURRENT BLUEPRINT
+    private Blueprint currentBlueprint;
+    public Blueprint CurrentBlueprint
+    {
+        get { return currentBlueprint; }
+        set { currentBlueprint = value; }
+    }
+
+    public static BlueprintEditor m_Instance = null;        // -- THIS EDITOR
+    
+
+    // -- TOOL PARTS
+    public static MenuBar m_MenuBar = null;                 // -- TOP BAR OF HIGH LEVEL CONTROLS
+    public static DraftArea m_DraftArea = null;        // -- NODE WORKING AREA
 
     // Add menu named "My Window" to the Window menu
     [MenuItem("Window/Open Blueprint Editor")]
-    static void Init()
+    static void OpenBlueprintEditor()
     {
         // Get existing open window or if none, make a new one:
-        BlueprintEditor window = (BlueprintEditor)EditorWindow.GetWindow(typeof(BlueprintEditor));
-        window.Show();
-
-        // -- Load our scriptable object blueprints
-        LoadBlueprints();
+        m_Instance = (BlueprintEditor)EditorWindow.GetWindow(typeof(BlueprintEditor));
+        m_Instance.Show();
     }
 
-    static void LoadBlueprints()
+    private void OnEnable()
     {
-        blueprints.Clear();
+        m_MenuBar = new MenuBar();
+        m_MenuBar.Init(this);
 
-        object[] assets = AssetDatabase.LoadAllAssetsAtPath("assets/blueprints");
+        m_DraftArea = new DraftArea();
+        m_DraftArea.Init(this);
+    }
 
-        foreach (object o in assets)
+
+    void OpenBlueprint()
+    {
+        string path = EditorUtility.OpenFilePanel("Open Blueprint", "Assets/blueprints", "asset");
+
+        if (path.Contains("Assets/Blueprints/"))
         {
-            blueprints.Add(((Blueprint)o).name, (Blueprint)o);
+            // -- cut the end off the path so we are left with a file name...
+            int cut = 0;
+            for (int i = path.Length - 1; i >= 0; i--)
+            {
+                if (path[i] == '/')
+                {
+                    cut = i + 1;
+                    break;
+                }
+            }
+            path = path.Remove(0, cut);
+
+            if (path.Length != 0)
+            {
+                currentBlueprint = (Blueprint)AssetDatabase.LoadAssetAtPath("Assets/blueprints/" + path, typeof(Blueprint));
+            }
+        }
+        else
+        {
+            EditorUtility.DisplayDialog("BAD LOCATION", "File does not appear to be in the Assets/Blueprints/ folder!", "Ok");
         }
     }
 
 
     void OnGUI()
     {
-        int selected = 0;
-        string[] options = new string[]
+        // -- make sure we are init
+        if( !m_MenuBar || !m_DraftArea)
         {
-            "Option1", "Option2", "Option3",
-        };
-        selected = EditorGUILayout.Popup("Label", selected, options);
-
-        if (GUILayout.Button("NEW BLUEPRINT"))
-        {
-            if (blueprints.ContainsKey(name))
-            {
-                if (EditorUtility.DisplayDialog("Blueprint of this name already exists!", "There is already a blueprint with this name, replace?", "Yes", "No"))
-                {
-                    CreateNewBlueprint();
-                }
-            }
-            else
-            {
-                CreateNewBlueprint();
-            }
+            return;
         }
 
-        if (currentBlueprint)
-        {
-            if (GUILayout.Button("CREATE NODE"))
-            {
-                CreateNewNode();
-            }
-            if (GUILayout.Button("CREATE VARIABLE NODE"))
-            {
-                currentBlueprint.nodes.Add(new VariableNode());
-            }
-        }
+        BeginWindows();
 
-        if (!currentBlueprint){ return; }
+        // -- DRAW THE MENU BAR
+        m_MenuBar.Draw();
 
-        // -- Draw nodes
-        DrawNodes();
+        // -- DRAW THE DRAFT AREA
+        m_DraftArea.Draw();
 
-        //HandleNodeClickAndDrag();
-
-        HandleNodeDrag();
+        EndWindows();
 
 
         if (Event.current != null)
@@ -85,7 +94,9 @@ public class BlueprintEditor : EditorWindow
             // Repaint the window as wantsMouseMove doesnt trigger a repaint automatically
             Repaint();
         }
+        
 
+        // bolt you
         Resources.UnloadUnusedAssets();
     }
 
@@ -264,57 +275,4 @@ public class BlueprintEditor : EditorWindow
     //    }
     //}
 
-
-
-    Blueprint CreateNewBlueprint()
-    {
-        // -- check for "assets/blueprints" folder
-        if (Directory.Exists("assets/blueprints"))      // -- can also do AssetDatabase.IsValidFolder
-        {
-            Debug.Log("GOT BLUEPRINTS FOLDER");
-        }
-        else
-        {
-            Directory.CreateDirectory("assets/blueprints");
-            Debug.Log("CREATING BLUEPRINTS FOLDER");
-        }
-
-        // -- create a new folder using the string entry
-
-        // -- create the asset and save it
-        Blueprint asset = CreateInstance<Blueprint>();
-        AssetDatabase.CreateAsset(asset, "Assets/blueprints/New Blueprint.asset");
-        AssetDatabase.SaveAssets();
-
-        // -- add or replace to loaded blueprints 
-        if (blueprints.ContainsKey(name))
-        {
-            blueprints[name] = asset;
-        }
-        else
-        {
-            blueprints.Add(name, asset);
-        }
-
-        // -- set current blueprint
-        currentBlueprint = asset;
-
-        return asset;
-    }
-
-
-    void CreateNewNode()
-    {
-        currentBlueprint.nodes.Add(new Node());
-    }
-
-
-    void DrawNodes()
-    {
-        for (int nLoop = 0; nLoop < currentBlueprint.nodes.Count; nLoop++)
-        {
-            Node n = currentBlueprint.nodes[nLoop];
-            n.Draw();
-        }
-    }
 }
