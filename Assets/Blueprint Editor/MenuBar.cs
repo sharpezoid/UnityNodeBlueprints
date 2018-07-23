@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
+using System.Text;
 
 /// <summary>
 /// TOP MENU BAR, File Edit Etc.
@@ -110,91 +111,62 @@ public class MenuBar : EditorWindow
 
     private void CustomSave()
     {
-        string blueprintSaveString = "Error - no string found";
+        StringBuilder sb = new StringBuilder();
+
+        // -- SAVE THE NAME
+        sb.AppendLine(m_Editor.CurrentBlueprint.str_Name);
+
         foreach (Node n in m_Editor.CurrentBlueprint.nodes)
         {
-            blueprintSaveString = n.SaveNode();
+            sb.Append(n.SaveNode());
+            sb.AppendLine("`");
         }
 
         string filePath = Application.dataPath + "/Blueprints/" + m_Editor.CurrentBlueprint.str_Name + ".blueprint";
-        File.WriteAllText(filePath, blueprintSaveString);
+        File.WriteAllText(filePath, sb.ToString());
     }
 
     private void CustomLoad()
     {
         string path = EditorUtility.OpenFilePanel("Open Blueprint", "Assets/blueprints", "blueprint");
 
-        //if (path.Contains("Assets/Blueprints/"))
-        //{
-        //    // -- cut the end off the path so we are left with a file name...
-        //    int cut = 0;
-        //    for (int i = path.Length - 1; i >= 0; i--)
-        //    {
-        //        if (path[i] == '/')
-        //        {
-        //            cut = i + 1;
-        //            break;
-        //        }
-        //    }
-        //    path = path.Remove(0, cut);
-
-        //    if (path.Length != 0)
-        //    {
-        //        m_Editor.CurrentBlueprint = (Blueprint)AssetDatabase.LoadAssetAtPath("Assets/blueprints/" + path, typeof(Blueprint));
-        //    }
-        //}
-        //else
-        //{
-        //    EditorUtility.DisplayDialog("BAD LOCATION", "File does not appear to be in the Assets/Blueprints/ folder!", "Ok");
-        //}
-
-
         //Read the text from directly from the test.txt file
         StreamReader reader = new StreamReader(path);
-        Debug.Log(reader.ReadToEnd());
+
+        // -- read whole block and split into node blocks
+        string[] holder = reader.ReadToEnd().Split('`');
+
+        for (int nLoop = 0; nLoop < holder.GetLength(0); nLoop++)
+        {
+            Debug.Log("Nloop : " + nLoop + " - " + holder[nLoop]);
+        }
+
+        // -- go through each line and figure out what it is...
+        for(int i = 0; i < holder.GetLength(0); i++)
+        {
+            if (holder[i] != string.Empty)
+            {
+                Debug.Log(holder[i]);
+                string[] splitLine = holder[i].Split(':');
+
+                // -- if its a type, new node...
+                switch (splitLine[0])
+                {
+                    case "type":
+                        switch (splitLine[1])
+                        {
+                            case "comment":
+                                
+                                break;
+                        }
+                        break;
+                }
+            }
+        }
+
         reader.Close();
     }
 
-    private void SaveBlueprintData()
-    {
-        string dataAsJson = JsonUtility.ToJson(m_Editor.CurrentBlueprint);
-
-        string filePath = Application.dataPath + "/Blueprints/asset.txt";
-        File.WriteAllText(filePath, dataAsJson);
-
-    }
-
-    static void SaveBlueprint(bool shite)
-    {
-        //string path = "Assets/Resources/test.txt";
-        string path = EditorUtility.OpenFilePanel("Open Blueprint", "Assets/blueprints", "asset");
-
-        // -- Reverse parse the blueprint to create a neat file, we could JSON or something?
-
-
-        //Write some text to the test.txt file
-        StreamWriter writer = new StreamWriter(path, true);
-        
-        writer.WriteLine("Test");
-        writer.Close();
-
-        //Re-import the file to update the reference in the editor
-        AssetDatabase.ImportAsset(path);
-        TextAsset asset = (TextAsset)Resources.Load("test");
-
-        //Print the text from the file
-        Debug.Log(asset.text);
-    }
-
-    static void OpenBlueprint()
-    {
-        string path = "Assets/Resources/test.txt";
-
-        //Read the text from directly from the test.txt file
-        StreamReader reader = new StreamReader(path);
-        Debug.Log(reader.ReadToEnd());
-        reader.Close();
-    }
 }
 
 
