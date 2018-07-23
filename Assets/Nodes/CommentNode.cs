@@ -23,7 +23,7 @@ public class CommentNode : Node
 
         if (editing)
         {
-            comment = EditorGUI.TextArea(position, comment); 
+            comment = EditorGUI.TextField(position, comment); 
         }
         else
         {
@@ -61,4 +61,6 @@ public class CommentNode : Node
 
         return sb.ToString();
     }
+
+
 }

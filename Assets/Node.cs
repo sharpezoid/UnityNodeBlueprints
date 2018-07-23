@@ -137,4 +137,10 @@ public class Node
 
         return sb.ToString();
     }
+
+
+    public virtual void LoadData()
+    {
+        // -- Get the file...
+    }
 }

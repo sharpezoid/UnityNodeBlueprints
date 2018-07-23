@@ -49,7 +49,7 @@ public class MenuBar : EditorWindow
         GenericMenu menu = new GenericMenu();
         menu.DropDown(GUILayoutUtility.GetLastRect());
         menu.AddItem(new GUIContent("New Blueprint"), false, CreateNewBlueprint);
-        menu.AddItem(new GUIContent("Open Blueprint"), false, OpenExistingBlueprint);
+        menu.AddItem(new GUIContent("Open Blueprint"), false, CustomLoad);
         menu.AddSeparator("");
         menu.AddItem(new GUIContent("Save"), false, CustomSave);
         menu.ShowAsContext();
@@ -77,36 +77,36 @@ public class MenuBar : EditorWindow
     }
 
 
-    void OpenExistingBlueprint()
-    {
-        Debug.Log("Open Existing");
+    //void OpenExistingBlueprint()
+    //{
+    //    Debug.Log("Open Existing");
 
-        string path = EditorUtility.OpenFilePanel("Open Blueprint", "Assets/blueprints", "asset");
+    //    string path = EditorUtility.OpenFilePanel("Open Blueprint", "Assets/blueprints", "asset");
 
-        if (path.Contains("Assets/Blueprints/"))
-        {
-            // -- cut the end off the path so we are left with a file name...
-            int cut = 0;
-            for (int i = path.Length - 1; i >= 0; i--)
-            {
-                if (path[i] == '/')
-                {
-                    cut = i + 1;
-                    break;
-                }
-            }
-            path = path.Remove(0, cut);
+    //    if (path.Contains("Assets/Blueprints/"))
+    //    {
+    //        // -- cut the end off the path so we are left with a file name...
+    //        int cut = 0;
+    //        for (int i = path.Length - 1; i >= 0; i--)
+    //        {
+    //            if (path[i] == '/')
+    //            {
+    //                cut = i + 1;
+    //                break;
+    //            }
+    //        }
+    //        path = path.Remove(0, cut);
 
-            if (path.Length != 0)
-            {
-                m_Editor.CurrentBlueprint = (Blueprint)AssetDatabase.LoadAssetAtPath("Assets/blueprints/" + path, typeof(Blueprint));
-            }
-        }
-        else
-        {
-            EditorUtility.DisplayDialog("BAD LOCATION", "File does not appear to be in the Assets/Blueprints/ folder!", "Ok");
-        }
-    }
+    //        if (path.Length != 0)
+    //        {
+    //            //m_Editor.CurrentBlueprint = (Blueprint)AssetDatabase.LoadAssetAtPath("Assets/blueprints/" + path, typeof(Blueprint));
+    //        }
+    //    }
+    //    else
+    //    {
+    //        EditorUtility.DisplayDialog("BAD LOCATION", "File does not appear to be in the Assets/Blueprints/ folder!", "Ok");
+    //    }
+    //}
 
     private void CustomSave()
     {
@@ -116,8 +116,43 @@ public class MenuBar : EditorWindow
             blueprintSaveString = n.SaveNode();
         }
 
-        string filePath = Application.dataPath + "/Blueprints/asset.txt";
+        string filePath = Application.dataPath + "/Blueprints/" + m_Editor.CurrentBlueprint.str_Name + ".blueprint";
         File.WriteAllText(filePath, blueprintSaveString);
+    }
+
+    private void CustomLoad()
+    {
+        string path = EditorUtility.OpenFilePanel("Open Blueprint", "Assets/blueprints", "blueprint");
+
+        //if (path.Contains("Assets/Blueprints/"))
+        //{
+        //    // -- cut the end off the path so we are left with a file name...
+        //    int cut = 0;
+        //    for (int i = path.Length - 1; i >= 0; i--)
+        //    {
+        //        if (path[i] == '/')
+        //        {
+        //            cut = i + 1;
+        //            break;
+        //        }
+        //    }
+        //    path = path.Remove(0, cut);
+
+        //    if (path.Length != 0)
+        //    {
+        //        m_Editor.CurrentBlueprint = (Blueprint)AssetDatabase.LoadAssetAtPath("Assets/blueprints/" + path, typeof(Blueprint));
+        //    }
+        //}
+        //else
+        //{
+        //    EditorUtility.DisplayDialog("BAD LOCATION", "File does not appear to be in the Assets/Blueprints/ folder!", "Ok");
+        //}
+
+
+        //Read the text from directly from the test.txt file
+        StreamReader reader = new StreamReader(path);
+        Debug.Log(reader.ReadToEnd());
+        reader.Close();
     }
 
     private void SaveBlueprintData()
@@ -200,7 +235,7 @@ public class NewBlueprintPopup : EditorWindow
         if (GUILayout.Button("OK"))
         {
             // -- Check name validity
-            if (System.IO.File.Exists("Assets/blueprints/" + newBlueprintName + ".asset"))
+            if (System.IO.File.Exists("Assets/blueprints/" + newBlueprintName + ".blueprint"))
             {
                 errorMsg = "FILE EXISTS!";
             }
@@ -215,11 +250,8 @@ public class NewBlueprintPopup : EditorWindow
             else
             {
                 // -- create the asset and save it
-                Blueprint asset = CreateInstance<Blueprint>();
-                AssetDatabase.CreateAsset(asset, "Assets/blueprints/" + newBlueprintName + ".asset");
-                AssetDatabase.SaveAssets();
-
-                m_Editor.CurrentBlueprint = asset;
+                Blueprint newBlueprint = new Blueprint{str_Name = newBlueprintName};
+                m_Editor.CurrentBlueprint = newBlueprint;
 
                 this.Close();
             }

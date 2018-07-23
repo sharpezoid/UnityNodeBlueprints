@@ -30,7 +30,7 @@ public class DraftArea : EditorWindow
     public void Draw()
     {
         if (!m_Editor){ return; }
-        if (!m_Editor.CurrentBlueprint) { return; }
+        if (m_Editor.CurrentBlueprint == null) { return; }
 
         DrawNodes();
 
