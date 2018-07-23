@@ -130,41 +130,49 @@ public class MenuBar : EditorWindow
     {
         string path = EditorUtility.OpenFilePanel("Open Blueprint", "Assets/blueprints", "blueprint");
 
-        //Read the text from directly from the test.txt file
-        StreamReader reader = new StreamReader(path);
-
-        // -- read whole block and split into node blocks
-        string[] holder = reader.ReadToEnd().Split('`');
-
-        for (int nLoop = 0; nLoop < holder.GetLength(0); nLoop++)
+        if (path != "")
         {
-            Debug.Log("Nloop : " + nLoop + " - " + holder[nLoop]);
-        }
+            //Read the text from directly from the test.txt file
+            StreamReader reader = new StreamReader(path);
 
-        // -- go through each line and figure out what it is...
-        for(int i = 0; i < holder.GetLength(0); i++)
-        {
-            if (holder[i] != string.Empty)
+            // -- READ FIRST LINE TO GET THE NAME
+            string blueprintName = reader.ReadLine();
+
+            Debug.Log("PROCESSING BLUEPRINT : " + blueprintName);
+
+            // -- read whole block and split into node blocks
+            string[] holder = reader.ReadToEnd().Split('`');
+
+            for (int nLoop = 0; nLoop < holder.GetLength(0); nLoop++)
             {
-                Debug.Log(holder[i]);
-                string[] splitLine = holder[i].Split(':');
+                Debug.Log("Nloop : " + nLoop + " - " + holder[nLoop]);
+            }
 
-                // -- if its a type, new node...
-                switch (splitLine[0])
+            // -- go through each line and figure out what it is...
+            for (int i = 0; i < holder.GetLength(0); i++)
+            {
+                if (holder[i] != string.Empty)
                 {
-                    case "type":
-                        switch (splitLine[1])
-                        {
-                            case "comment":
-                                
-                                break;
-                        }
-                        break;
+                    Debug.Log(holder[i]);
+                    string[] splitLine = holder[i].Split(':');
+
+                    // -- if its a type, new node...
+                    switch (splitLine[0])
+                    {
+                        case "type":
+                            switch (splitLine[1])
+                            {
+                                case "comment":
+
+                                    break;
+                            }
+                            break;
+                    }
                 }
             }
-        }
 
-        reader.Close();
+            reader.Close();
+        }
     }
 
 }
