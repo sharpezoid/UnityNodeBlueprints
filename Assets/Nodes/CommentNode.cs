@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Text;
 
 public class CommentNode : Node
 {
@@ -13,6 +14,7 @@ public class CommentNode : Node
     {
         position = new Rect(_pos, new Vector2(100, 30));
         color = Color.gray;
+        nodeType = NodeData.NodeType.Comment;
     }
 
     public override void Draw()
@@ -44,5 +46,19 @@ public class CommentNode : Node
                 editing = false;
             }
         }
+    }
+
+
+    public override string SaveNode()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        string save = base.SaveNode();
+        sb.Append(save);
+
+        // -- Comment
+        sb.AppendLine("comment:" + comment);
+
+        return sb.ToString();
     }
 }

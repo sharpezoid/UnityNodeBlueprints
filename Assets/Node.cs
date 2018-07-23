@@ -23,7 +23,7 @@ public class Node
     [HideInInspector]
     public Rect position;
 
-    public Node(Vector2 _pos)
+    protected Node(Vector2 _pos)
     {
         position = new Rect(_pos, sizeDelta);
     }
@@ -121,36 +121,20 @@ public class Node
     /// <summary>
     /// Serialise the node, we write custom parsing for saving/loading our nodes as Unity cant even
     /// </summary>
-    public virtual void SaveNode()
+    public virtual string SaveNode()
     {
         // -- SERIALISE THE HARD WAY
         StringBuilder sb = new StringBuilder();
 
-        sb.Append("[");
-
         // -- TYPE
-        sb.Append(nodeType.ToString());
-        sb.Append("|");
+        sb.AppendLine("type:"+ nodeType.ToString());
 
         // -- COLOR // do we hard set this or serialise it in some options somewhere? :s
-        sb.Append(color.ToString());
-        sb.Append("|");
+        sb.AppendLine("color:"+color.ToString());
 
+        // -- POSITION
+        sb.AppendLine("position:" + position.ToString());
 
-    //    // -- THIS NODE TYPE
-    //public NodeData.NodeType nodeType = NodeData.NodeType.Debug;
-
-    //// -- COLOR OF THIS NODE
-    //public Color color = Color.magenta;
-
-    //// -- TEXTURE FOR RENDERING NODE
-    //Texture2D texture;
-
-    //[HideInInspector]
-    //public Vector2 sizeDelta = new Vector2(100, 100);
-
-    //[HideInInspector]
-    //public Rect position;
-
-}
+        return sb.ToString();
+    }
 }

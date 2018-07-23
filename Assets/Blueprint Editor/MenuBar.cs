@@ -51,7 +51,7 @@ public class MenuBar : EditorWindow
         menu.AddItem(new GUIContent("New Blueprint"), false, CreateNewBlueprint);
         menu.AddItem(new GUIContent("Open Blueprint"), false, OpenExistingBlueprint);
         menu.AddSeparator("");
-        menu.AddItem(new GUIContent("Save"), false, SaveBlueprintData);
+        menu.AddItem(new GUIContent("Save"), false, CustomSave);
         menu.ShowAsContext();
     }
 
@@ -108,6 +108,18 @@ public class MenuBar : EditorWindow
         }
     }
 
+    private void CustomSave()
+    {
+        string blueprintSaveString = "Error - no string found";
+        foreach (Node n in m_Editor.CurrentBlueprint.nodes)
+        {
+            blueprintSaveString = n.SaveNode();
+        }
+
+        string filePath = Application.dataPath + "/Blueprints/asset.txt";
+        File.WriteAllText(filePath, blueprintSaveString);
+    }
+
     private void SaveBlueprintData()
     {
         string dataAsJson = JsonUtility.ToJson(m_Editor.CurrentBlueprint);
@@ -124,8 +136,10 @@ public class MenuBar : EditorWindow
 
         // -- Reverse parse the blueprint to create a neat file, we could JSON or something?
 
+
         //Write some text to the test.txt file
         StreamWriter writer = new StreamWriter(path, true);
+        
         writer.WriteLine("Test");
         writer.Close();
 

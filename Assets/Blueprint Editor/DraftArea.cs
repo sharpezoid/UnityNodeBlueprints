@@ -183,15 +183,15 @@ public class DraftArea : EditorWindow
                 break;
 
             case NodeData.NodeType.Debug:
-                m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+                //m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
                 break;
 
             case NodeData.NodeType.Event:
-                m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+                //m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
                 break;
 
             case NodeData.NodeType.Function:
-                m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+                //m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
                 break;
 
             case NodeData.NodeType.Variable:
