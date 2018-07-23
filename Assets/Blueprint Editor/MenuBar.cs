@@ -50,6 +50,8 @@ public class MenuBar : EditorWindow
         menu.DropDown(GUILayoutUtility.GetLastRect());
         menu.AddItem(new GUIContent("New Blueprint"), false, CreateNewBlueprint);
         menu.AddItem(new GUIContent("Open Blueprint"), false, OpenExistingBlueprint);
+        menu.AddSeparator("");
+        menu.AddItem(new GUIContent("Save"), false, SaveBlueprintData);
         menu.ShowAsContext();
     }
 
@@ -105,6 +107,45 @@ public class MenuBar : EditorWindow
             EditorUtility.DisplayDialog("BAD LOCATION", "File does not appear to be in the Assets/Blueprints/ folder!", "Ok");
         }
     }
+
+    private void SaveBlueprintData()
+    {
+        string dataAsJson = JsonUtility.ToJson(m_Editor.CurrentBlueprint);
+
+        string filePath = Application.dataPath + "/Blueprints/asset.txt";
+        File.WriteAllText(filePath, dataAsJson);
+
+    }
+
+    static void SaveBlueprint(bool shite)
+    {
+        //string path = "Assets/Resources/test.txt";
+        string path = EditorUtility.OpenFilePanel("Open Blueprint", "Assets/blueprints", "asset");
+
+        // -- Reverse parse the blueprint to create a neat file, we could JSON or something?
+
+        //Write some text to the test.txt file
+        StreamWriter writer = new StreamWriter(path, true);
+        writer.WriteLine("Test");
+        writer.Close();
+
+        //Re-import the file to update the reference in the editor
+        AssetDatabase.ImportAsset(path);
+        TextAsset asset = (TextAsset)Resources.Load("test");
+
+        //Print the text from the file
+        Debug.Log(asset.text);
+    }
+
+    static void OpenBlueprint()
+    {
+        string path = "Assets/Resources/test.txt";
+
+        //Read the text from directly from the test.txt file
+        StreamReader reader = new StreamReader(path);
+        Debug.Log(reader.ReadToEnd());
+        reader.Close();
+    }
 }
 
 
@@ -114,7 +155,7 @@ public class NewBlueprintPopup : EditorWindow
     string newBlueprintName = "";
     BlueprintEditor m_Editor;
     string errorMsg = "";
-    
+
     public void SetEditor(BlueprintEditor _in)
     {
         m_Editor = _in;
@@ -129,7 +170,7 @@ public class NewBlueprintPopup : EditorWindow
         {
             Color c = GUI.color;
             GUI.color = Color.red;
-            GUILayout.Box(errorMsg, GUILayout.ExpandWidth(true)); 
+            GUILayout.Box(errorMsg, GUILayout.ExpandWidth(true));
             GUI.color = c;
         }
         else
@@ -153,7 +194,7 @@ public class NewBlueprintPopup : EditorWindow
             {
                 errorMsg = "EMPTY STRING";
             }
-            else if (newBlueprintName.Length < 1 )
+            else if (newBlueprintName.Length < 1)
             {
                 errorMsg = "NAME TOO SHORT";
             }

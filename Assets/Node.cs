@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Text;
 
 // -- REPRESENTATION OF A NODE IN THE TOOL
 [System.Serializable]
@@ -11,7 +12,7 @@ public class Node
     public NodeData.NodeType nodeType = NodeData.NodeType.Debug;
 
     // -- COLOR OF THIS NODE
-    public Color color = Color.grey;
+    public Color color = Color.magenta;
 
     // -- TEXTURE FOR RENDERING NODE
     Texture2D texture;
@@ -21,10 +22,6 @@ public class Node
 
     [HideInInspector]
     public Rect position;
-
-    public List<NodeInput> inputs;
-    public List<NodeOutput> outputs;
-
 
     public Node(Vector2 _pos)
     {
@@ -119,4 +116,41 @@ public class Node
         // -- OVERRIDE THIS CLASS AND CALL THE BASE FIRST THEN RENDER OWN THINGS ON THE PANEL
 
     }
+
+
+    /// <summary>
+    /// Serialise the node, we write custom parsing for saving/loading our nodes as Unity cant even
+    /// </summary>
+    public virtual void SaveNode()
+    {
+        // -- SERIALISE THE HARD WAY
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append("[");
+
+        // -- TYPE
+        sb.Append(nodeType.ToString());
+        sb.Append("|");
+
+        // -- COLOR // do we hard set this or serialise it in some options somewhere? :s
+        sb.Append(color.ToString());
+        sb.Append("|");
+
+
+    //    // -- THIS NODE TYPE
+    //public NodeData.NodeType nodeType = NodeData.NodeType.Debug;
+
+    //// -- COLOR OF THIS NODE
+    //public Color color = Color.magenta;
+
+    //// -- TEXTURE FOR RENDERING NODE
+    //Texture2D texture;
+
+    //[HideInInspector]
+    //public Vector2 sizeDelta = new Vector2(100, 100);
+
+    //[HideInInspector]
+    //public Rect position;
+
+}
 }

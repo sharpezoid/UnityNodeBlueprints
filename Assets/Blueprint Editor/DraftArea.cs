@@ -179,7 +179,7 @@ public class DraftArea : EditorWindow
         switch (_type)
         {
             case NodeData.NodeType.Comment:
-                m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+                m_Editor.CurrentBlueprint.nodes.Add(new CommentNode(mousePos));
                 break;
 
             case NodeData.NodeType.Debug:
@@ -195,7 +195,7 @@ public class DraftArea : EditorWindow
                 break;
 
             case NodeData.NodeType.Variable:
-                m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+                m_Editor.CurrentBlueprint.nodes.Add(new VariableNode(mousePos));
                 break;
         }
 

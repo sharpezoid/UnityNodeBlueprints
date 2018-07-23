@@ -69,8 +69,10 @@
     <Compile Include="Assets\NodeData.cs" />
     <Compile Include="Assets\NodeInput.cs" />
     <Compile Include="Assets\NodeOutput.cs" />
+    <Compile Include="Assets\Nodes\CommentNode.cs" />
     <Compile Include="Assets\ParticipantsNode.cs" />
     <Compile Include="Assets\VariableNode.cs" />
+    <None Include="Assets\Blueprints\asset.txt" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/Matt/Documents/GitHub/UnityNodeBlueprints/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
