@@ -1,3 +1,8 @@
 Library/
 Temp/
 *.lock
+Library/shadercompiler-UnityShaderCompiler.exe0.log
+Library/EditorInstance.json
+.vs/UnityNodeBlueprints/v15/Server/sqlite3/storage.ide-wal
+.vs/UnityNodeBlueprints/v15/.suo
+.vs/UnityNodeBlueprints/DesignTimeBuild/.dtbcache
