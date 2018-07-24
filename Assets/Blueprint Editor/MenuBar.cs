@@ -14,6 +14,11 @@ public class MenuBar : EditorWindow
 {
     BlueprintEditor m_Editor;
 
+    // -- Extra types for blueprint serialisation
+    Type[] extraTypes = { typeof(Node),
+                          typeof(CommentNode),
+                          typeof(VariableNode) };
+     
     public void Init(BlueprintEditor _m_Editor)
     {
         m_Editor = _m_Editor;
@@ -52,10 +57,9 @@ public class MenuBar : EditorWindow
         GenericMenu menu = new GenericMenu();
         //menu.DropDown(GUILayoutUtility.GetLastRect());
         menu.AddItem(new GUIContent("New Blueprint"), false, CreateNewBlueprint);
-        menu.AddItem(new GUIContent("Open Blueprint"), false, CustomLoad);
-        menu.AddItem(new GUIContent("XML SAVE"), false, SerialiseXML);
+        menu.AddItem(new GUIContent("Open Blueprint"), false, Open);
         menu.AddSeparator("");
-        menu.AddItem(new GUIContent("Save"), false, CustomSave);
+        menu.AddItem(new GUIContent("Save"), false, Save);
         menu.ShowAsContext();
     }
 
@@ -105,133 +109,32 @@ public class MenuBar : EditorWindow
     }
 
 
-    //void OpenExistingBlueprint()
-    //{
-    //    Debug.Log("Open Existing");
-
-    //    string path = EditorUtility.OpenFilePanel("Open Blueprint", "Assets/blueprints", "asset");
-
-    //    if (path.Contains("Assets/Blueprints/"))
-    //    {
-    //        // -- cut the end off the path so we are left with a file name...
-    //        int cut = 0;
-    //        for (int i = path.Length - 1; i >= 0; i--)
-    //        {
-    //            if (path[i] == '/')
-    //            {
-    //                cut = i + 1;
-    //                break;
-    //            }
-    //        }
-    //        path = path.Remove(0, cut);
-
-    //        if (path.Length != 0)
-    //        {
-    //            //m_Editor.CurrentBlueprint = (Blueprint)AssetDatabase.LoadAssetAtPath("Assets/blueprints/" + path, typeof(Blueprint));
-    //        }
-    //    }
-    //    else
-    //    {
-    //        EditorUtility.DisplayDialog("BAD LOCATION", "File does not appear to be in the Assets/Blueprints/ folder!", "Ok");
-    //    }
-    //}
-
-    private void SerialiseXML()
+    private void Save()
     {
-        Type[] extraTypes = { typeof(Node), typeof(CommentNode) };
         XmlSerializer serializer = new XmlSerializer(typeof(Blueprint), extraTypes);
         StreamWriter writer = new StreamWriter(Application.dataPath + "/Blueprints/" + m_Editor.CurrentBlueprint.str_Name + ".blueprint");
         serializer.Serialize(writer.BaseStream, m_Editor.CurrentBlueprint);
         writer.Close();
     }
 
-    private void CustomSave()
-    {
-        StringBuilder sb = new StringBuilder();
-
-        // -- SAVE THE NAME
-        sb.AppendLine(m_Editor.CurrentBlueprint.str_Name);
-
-        foreach (Node n in m_Editor.CurrentBlueprint.nodes)
-        {
-            sb.Append(n.SaveNode());
-            sb.AppendLine("`");
-        }
-
-        string filePath = Application.dataPath + "/Blueprints/" + m_Editor.CurrentBlueprint.str_Name + ".blueprint";
-        File.WriteAllText(filePath, sb.ToString());
-    }
-
-    private void CustomLoad()
+    private void Open()
     {
         string path = EditorUtility.OpenFilePanel("Open Blueprint", "Assets/blueprints", "blueprint");
 
         if (path != "")
         {
-            // -- Create empty blueprint and load our values into it.
-            Blueprint bp = new Blueprint();
-            
-            //Read the text from directly from the test.txt file
+            XmlSerializer serializer = new XmlSerializer(typeof(Blueprint), extraTypes);
             StreamReader reader = new StreamReader(path);
-            bp.str_Name = reader.ReadLine();
-
-            Debug.Log("PROCESSING BLUEPRINT : " + bp.str_Name);
-
-            List<string> lines = new List<string>();
-
-            do
-            {
-                lines.Add(reader.ReadLine());
-            }
-            while (reader.Peek() > -1);
-
-            for (int i = 0; i < lines.Count; i++)
-            {
-                Debug.Log("Line " + i + " " + lines[i]);
-                string[] line = lines[i].Split(':');
-
-                if (line[0] == "type")      // -- we have found a new node!
-                {
-
-                }
-            }
-
-            //// -- read whole block and split into node blocks
-            //string[] holder = reader.ReadToEnd().Split('/');
-
-            //for (int nLoop = 0; nLoop < holder.GetLength(0); nLoop++)
-            //{
-
-            //    Debug.Log("Nloop : " + nLoop + " - " + holder[nLoop]);
-            //}
-
-            // -- go through each line and figure out what it is...
-            //for (int i = 0; i < holder.GetLength(0); i++)
-            //{
-            //    if (holder[i] != string.Empty)
-            //    {
-            //        Debug.Log(holder[i]);
-            //        string[] splitLine = holder[i].Split(':');
-
-            //        // -- if its a type, new node...
-            //        switch (splitLine[0])
-            //        {
-            //            case "type":
-            //                switch (splitLine[1])
-            //                {
-            //                    case "comment":
-
-            //                        break;
-            //                }
-            //                break;
-            //        }
-            //    }
-            //}
-
+            Blueprint deserializedBP = (Blueprint)serializer.Deserialize(reader.BaseStream);
             reader.Close();
+
+            if (deserializedBP != null)
+            {
+                Debug.Log("LOADED!" + path);
+                m_Editor.CurrentBlueprint = deserializedBP;
+            }
         }
     }
-
 }
 
 
