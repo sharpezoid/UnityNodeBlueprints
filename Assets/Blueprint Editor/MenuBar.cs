@@ -5,6 +5,7 @@ using UnityEditor;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+using System;
 
 /// <summary>
 /// TOP MENU BAR, File Edit Etc.
@@ -137,8 +138,9 @@ public class MenuBar : EditorWindow
 
     private void SerialiseXML()
     {
-        XmlSerializer serializer = new XmlSerializer(typeof(Blueprint));
-        StreamWriter writer = new StreamWriter("/Blueprints/" + m_Editor.CurrentBlueprint.str_Name + ".blueprint");
+        Type[] extraTypes = { typeof(Node), typeof(CommentNode) };
+        XmlSerializer serializer = new XmlSerializer(typeof(Blueprint), extraTypes);
+        StreamWriter writer = new StreamWriter(Application.dataPath + "/Blueprints/" + m_Editor.CurrentBlueprint.str_Name + ".blueprint");
         serializer.Serialize(writer.BaseStream, m_Editor.CurrentBlueprint);
         writer.Close();
     }

@@ -4,11 +4,17 @@ using UnityEngine;
 using UnityEditor;
 using System.Text;
 
+[System.Serializable]
 public class CommentNode : Node
 {
     bool editing = false;
 
     public string comment = "Enter comment...";
+
+    public CommentNode() : base()
+    {
+
+    }
 
     public CommentNode(Vector2 _pos) : base(_pos)
     {

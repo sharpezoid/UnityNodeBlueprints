@@ -23,7 +23,12 @@ public class Node
     [HideInInspector]
     public Rect position;
 
-    protected Node(Vector2 _pos)
+    public Node()
+    {
+
+    }
+
+    public Node(Vector2 _pos)       // public so xml can serialise...
     {
         position = new Rect(_pos, sizeDelta);
     }

@@ -8,6 +8,7 @@ using UnityEngine;
 public class Blueprint
 {
     public string str_Name = "";
+
     public List<Node> nodes = new List<Node>();
 
     public Blueprint()
