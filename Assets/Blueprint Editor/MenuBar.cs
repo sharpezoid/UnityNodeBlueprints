@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Text;
+using System.Xml.Serialization;
 
 /// <summary>
 /// TOP MENU BAR, File Edit Etc.
@@ -30,16 +31,16 @@ public class MenuBar : EditorWindow
             BuildFileContextMenu();
         }
 
+
         if (GUILayout.Button("Edit", EditorStyles.miniButton, GUILayout.Width(100)))
         {
-            Debug.Log("EDIT CLICKED");
-            // #TODO Edit Menu functionality
+            BuildEditContextMenu();
         }
+
 
         if (GUILayout.Button("Help", EditorStyles.miniButton, GUILayout.Width(100)))
         {
-            Debug.Log("HALP CLICKED");
-            // #TODO Readme + Info
+            BuildHelpContextMenu();
         }
 
         GUILayout.EndHorizontal(); 
@@ -48,11 +49,26 @@ public class MenuBar : EditorWindow
     public void BuildFileContextMenu()
     {
         GenericMenu menu = new GenericMenu();
-        menu.DropDown(GUILayoutUtility.GetLastRect());
+        //menu.DropDown(GUILayoutUtility.GetLastRect());
         menu.AddItem(new GUIContent("New Blueprint"), false, CreateNewBlueprint);
         menu.AddItem(new GUIContent("Open Blueprint"), false, CustomLoad);
+        menu.AddItem(new GUIContent("XML SAVE"), false, SerialiseXML);
         menu.AddSeparator("");
         menu.AddItem(new GUIContent("Save"), false, CustomSave);
+        menu.ShowAsContext();
+    }
+
+    public void BuildEditContextMenu()
+    {
+        GenericMenu menu = new GenericMenu();
+        menu.AddItem(new GUIContent("Preferences"), false, ShowPreferencesWindow);
+        menu.ShowAsContext();
+    }
+
+    public void BuildHelpContextMenu()
+    {
+        GenericMenu menu = new GenericMenu();
+        menu.AddItem(new GUIContent("About"), false, ShowInfoWindow);
         menu.ShowAsContext();
     }
 
@@ -75,6 +91,16 @@ public class MenuBar : EditorWindow
         NewBlueprintPopup nameWindow = GetWindow<NewBlueprintPopup>();
         nameWindow.SetEditor(m_Editor);
         EndWindows();
+    }
+
+    void ShowPreferencesWindow()
+    {
+        // -- #TODO create a preferences window, change colours, options etc
+    }
+
+    void ShowInfoWindow()
+    {
+        // -- #TODO Show info window about the tool and licensing etc...
     }
 
 
@@ -109,6 +135,14 @@ public class MenuBar : EditorWindow
     //    }
     //}
 
+    private void SerialiseXML()
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(Blueprint));
+        StreamWriter writer = new StreamWriter("/Blueprints/" + m_Editor.CurrentBlueprint.str_Name + ".blueprint");
+        serializer.Serialize(writer.BaseStream, m_Editor.CurrentBlueprint);
+        writer.Close();
+    }
+
     private void CustomSave()
     {
         StringBuilder sb = new StringBuilder();
@@ -132,44 +166,65 @@ public class MenuBar : EditorWindow
 
         if (path != "")
         {
+            // -- Create empty blueprint and load our values into it.
+            Blueprint bp = new Blueprint();
+            
             //Read the text from directly from the test.txt file
             StreamReader reader = new StreamReader(path);
+            bp.str_Name = reader.ReadLine();
 
-            // -- READ FIRST LINE TO GET THE NAME
-            string blueprintName = reader.ReadLine();
+            Debug.Log("PROCESSING BLUEPRINT : " + bp.str_Name);
 
-            Debug.Log("PROCESSING BLUEPRINT : " + blueprintName);
+            List<string> lines = new List<string>();
 
-            // -- read whole block and split into node blocks
-            string[] holder = reader.ReadToEnd().Split('`');
-
-            for (int nLoop = 0; nLoop < holder.GetLength(0); nLoop++)
+            do
             {
-                Debug.Log("Nloop : " + nLoop + " - " + holder[nLoop]);
+                lines.Add(reader.ReadLine());
             }
+            while (reader.Peek() > -1);
 
-            // -- go through each line and figure out what it is...
-            for (int i = 0; i < holder.GetLength(0); i++)
+            for (int i = 0; i < lines.Count; i++)
             {
-                if (holder[i] != string.Empty)
+                Debug.Log("Line " + i + " " + lines[i]);
+                string[] line = lines[i].Split(':');
+
+                if (line[0] == "type")      // -- we have found a new node!
                 {
-                    Debug.Log(holder[i]);
-                    string[] splitLine = holder[i].Split(':');
 
-                    // -- if its a type, new node...
-                    switch (splitLine[0])
-                    {
-                        case "type":
-                            switch (splitLine[1])
-                            {
-                                case "comment":
-
-                                    break;
-                            }
-                            break;
-                    }
                 }
             }
+
+            //// -- read whole block and split into node blocks
+            //string[] holder = reader.ReadToEnd().Split('/');
+
+            //for (int nLoop = 0; nLoop < holder.GetLength(0); nLoop++)
+            //{
+
+            //    Debug.Log("Nloop : " + nLoop + " - " + holder[nLoop]);
+            //}
+
+            // -- go through each line and figure out what it is...
+            //for (int i = 0; i < holder.GetLength(0); i++)
+            //{
+            //    if (holder[i] != string.Empty)
+            //    {
+            //        Debug.Log(holder[i]);
+            //        string[] splitLine = holder[i].Split(':');
+
+            //        // -- if its a type, new node...
+            //        switch (splitLine[0])
+            //        {
+            //            case "type":
+            //                switch (splitLine[1])
+            //                {
+            //                    case "comment":
+
+            //                        break;
+            //                }
+            //                break;
+            //        }
+            //    }
+            //}
 
             reader.Close();
         }

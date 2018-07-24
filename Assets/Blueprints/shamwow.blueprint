@@ -2,5 +2,12 @@ shamwow
 type:Comment
 color:RGBA(0.500, 0.500, 0.500, 1.000)
 position:(x:335.00, y:425.00, width:100.00, height:30.00)
-comment:Enter comment...
-`
+comment:Enter comment1...
+type:Comment
+color:RGBA(0.500, 0.500, 0.500, 1.000)
+position:(x:335.00, y:425.00, width:100.00, height:30.00)
+comment:Enter comment2...
+type:Comment
+color:RGBA(0.500, 0.500, 0.500, 1.000)
+position:(x:335.00, y:425.00, width:100.00, height:30.00)
+comment:Enter comment3...
