@@ -10,6 +10,8 @@ public class NodeData
         Event,
         Variable,
         Function,
+        Math,
+        Macro,
         Debug,
 
         COUNT

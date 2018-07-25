@@ -31,10 +31,17 @@ public class DraftArea : EditorWindow
     {
         if (!m_Editor){ return; }
         if (m_Editor.CurrentBlueprint == null) { return; }
+        
+        // -- Draw Selection Box
+        GUI.Box(selectionRect, "");
 
         DrawNodes();
 
         HandleNodeDrag();
+
+
+
+
 
         if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
         {
@@ -166,7 +173,7 @@ public class DraftArea : EditorWindow
         else if (Event.current.type == EventType.MouseUp && Event.current.button == 0)
         {
             draggingSelectionRect = false;
-            //selectionRect = new Rect(0, 0, 0, 0);
+            selectionRect = new Rect(0, 0, 0, 0);
         }
 
     }
