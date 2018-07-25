@@ -8,7 +8,7 @@ using UnityEngine;
 [System.Serializable]
 public class FlowNode : Node
 {
-    public List<NodeInput> inputs
+    public List<NodeInput> inputs;
 
     #region Constructors
     public FlowNode() : base()

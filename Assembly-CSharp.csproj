@@ -74,6 +74,7 @@
     <Compile Include="Assets\Nodes\CommentNode.cs" />
     <Compile Include="Assets\Nodes\EventNode.cs" />
     <Compile Include="Assets\Nodes\FlowConnector.cs" />
+    <Compile Include="Assets\Nodes\FlowNode.cs" />
     <Compile Include="Assets\ParticipantsNode.cs" />
     <Compile Include="Assets\Utility\Monosingleton.cs" />
     <Compile Include="Assets\VariableNode.cs" />
