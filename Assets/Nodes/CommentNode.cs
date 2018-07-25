@@ -53,20 +53,4 @@ public class CommentNode : Node
             }
         }
     }
-
-
-    public override string SaveNode()
-    {
-        StringBuilder sb = new StringBuilder();
-
-        string save = base.SaveNode();
-        sb.Append(save);
-
-        // -- Comment
-        sb.AppendLine("comment:" + comment);
-
-        return sb.ToString();
-    }
-
-
 }

@@ -121,32 +121,4 @@ public class Node
         // -- OVERRIDE THIS CLASS AND CALL THE BASE FIRST THEN RENDER OWN THINGS ON THE PANEL
 
     }
-
-
-    /// <summary>
-    /// Serialise the node, we write custom parsing for saving/loading our nodes as Unity cant even
-    /// </summary>
-    public virtual string SaveNode()
-    {
-        // -- SERIALISE THE HARD WAY
-        StringBuilder sb = new StringBuilder();
-
-        // -- TYPE
-        sb.AppendLine("type:"+ nodeType.ToString());
-
-        // -- COLOR // do we hard set this or serialise it in some options somewhere? :s
-        sb.AppendLine("color:"+color.ToString());
-
-        // -- POSITION
-        sb.AppendLine("position:" + position.ToString());
-
-        return sb.ToString();
-    }
-
-
-    public virtual void LoadData()
-    {
-        // -- Get the file...
-
-    }
 }
