@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Blueprint represents the collection of nodes that we have.
 /// </summary>
+[System.Serializable]
 public class Blueprint
 {
     public string str_Name = "";

@@ -5,9 +5,13 @@ using UnityEngine;
 /// <summary>
 /// Blueprint Holder component, attach to gameobject and attach blueprints to it, these will then be controlled by the player.
 /// </summary>
+[System.Serializable]
 public class BlueprintHolder : MonoBehaviour
 {
+    [SerializeField]
     public List<Blueprint> blueprints = new List<Blueprint>();
+    [SerializeField][HideInInspector]
+    public List<Object> bps = new List<Object>();
 
     private void Awake()
     {

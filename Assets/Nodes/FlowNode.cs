@@ -28,14 +28,11 @@ public class FlowNode : Node
     {
         base.Draw();
 
-
-
         // -- Controls for handling drag of flow lines
         if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
         {
 
         }
-
 
         if (Event.current.clickCount > 1)
         {
