@@ -20,20 +20,40 @@ public class BlueprintHolderEditor : Editor
     {
         serializedObject.Update();
 
-        EditorGUILayout.PropertyField(blueprints);
+        EditorGUILayout.PropertyField(blueprints, true);
 
-        List<Blueprint> bps = blueprints.objectReferenceValue as System.Object as List<Blueprint>; //m_achievement.objectReferenceValue as System.Object as Achievement;
+        Debug.Log("Type : " + blueprints.type + "   prop type : " + blueprints.propertyType);
 
-        // -- Render BP names stored in holder
-        for (int bLoop = 0; bLoop < bps.Count; bLoop++)
+        for (int i = 0; i < blueprints.arraySize; i++)
         {
-            EditorGUILayout.LabelField(bps[bLoop].str_Name);
+            EditorGUILayout.LabelField(" BSP : " + i.ToString() + "  " + blueprints.GetArrayElementAtIndex(i).ToString());
         }
+
+        //System.Object o = blueprints.objectReferenceValue as System.Object;
+        //List<Blueprint> bps = new List<Blueprint>();
+
+        //if (bps != null)
+        //{
+          // Debug.Log("Blueprints ref : " + blueprints.objectReferenceValue.ToString() );
+
+        //   // List<Blueprint> bps = blueprints.objectReferenceValue as System.Object as List<Blueprint>; //m_achievement.objectReferenceValue as System.Object as Achievement;
+
+        //    // -- Render BP names stored in holder
+        //    for (int bLoop = 0; bLoop < bps.Count; bLoop++)
+        //    {
+        //        EditorGUILayout.LabelField(bps[bLoop].str_Name);
+        //    }
+        //}
 
         // -- Add / Remove BPs
         if (GUILayout.Button("Add Blueprint"))
         {
             AddBlueprint();
+        }
+
+        if (GUILayout.Button("Clear"))
+        {
+            blueprints.ClearArray();
         }
 
         // -- Display Errors / Warnings / Conflicts & Notes
@@ -51,6 +71,13 @@ public class BlueprintHolderEditor : Editor
         if (path != "")
         {
             Object o = AssetDatabase.LoadAssetAtPath(path, typeof(Object));
+
+            //blueprints.arraySize++;
+
+            //blueprints.InsertArrayElementAtIndex(0);
+            //blueprints.arra
+
+
             //XmlSerializer serializer = new XmlSerializer(typeof(Blueprint), extraTypes);
             //StreamReader reader = new StreamReader(path);
             //Blueprint deserializedBP = (Blueprint)serializer.Deserialize(reader.BaseStream);

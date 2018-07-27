@@ -36,10 +36,7 @@ public class BlueprintEditor : EditorWindow
         if (EditorApplication.isPlaying == false)
         {
             EditorApplication.isPlaying = true;
-        }
-
-
-        
+        } 
     }
 
 
