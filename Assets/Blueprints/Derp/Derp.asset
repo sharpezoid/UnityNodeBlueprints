@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5478083b8d2842f4288cdac697511625, type: 3}
+  m_Name: Derp
+  m_EditorClassIdentifier: 
+  str_Name: Derp
+  nodes:
+  - {fileID: 11400000, guid: bde92a87022a46041841f4c7116c0a15, type: 2}
+  - {fileID: 11400000, guid: 3a4a55283d6472341bb81f5408f93ca5, type: 2}
+  - {fileID: 11400000, guid: e48699f3f4525c944bb215152af5d19a, type: 2}

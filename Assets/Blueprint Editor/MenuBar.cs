@@ -18,7 +18,10 @@ public class MenuBar : EditorWindow
     Type[] extraTypes = { typeof(Node),
                           typeof(CommentNode),
                           typeof(VariableNode) };
-     
+
+    public const string bpLocation = "Assets/Blueprints";
+
+
     public void Init(BlueprintEditor _m_Editor)
     {
         m_Editor = _m_Editor;
@@ -37,12 +40,10 @@ public class MenuBar : EditorWindow
             BuildFileContextMenu();
         }
 
-
         if (GUILayout.Button("Edit", EditorStyles.miniButton, GUILayout.Width(100)))
         {
             BuildEditContextMenu();
         }
-
 
         if (GUILayout.Button("Help", EditorStyles.miniButton, GUILayout.Width(100)))
         {
@@ -57,9 +58,9 @@ public class MenuBar : EditorWindow
         GenericMenu menu = new GenericMenu();
         //menu.DropDown(GUILayoutUtility.GetLastRect());
         menu.AddItem(new GUIContent("New Blueprint"), false, CreateNewBlueprint);
-        menu.AddItem(new GUIContent("Open Blueprint"), false, Open);
+        menu.AddItem(new GUIContent("Open Blueprint"), false, OpenBlueprint);
         menu.AddSeparator("");
-        menu.AddItem(new GUIContent("Save"), false, Save);
+        //menu.AddItem(new GUIContent("Save"), false, Save);
         menu.ShowAsContext();
     }
 
@@ -80,21 +81,19 @@ public class MenuBar : EditorWindow
 
     void CreateNewBlueprint()
     {
-        // -- check for "assets/blueprints" folder
-        if (Directory.Exists("assets/blueprints"))      // -- can also do AssetDatabase.IsValidFolder
-        {
-            Debug.Log("GOT BLUEPRINTS FOLDER");
-        }
-        else
-        {
-            Directory.CreateDirectory("assets/blueprints");
-            Debug.Log("CREATING BLUEPRINTS FOLDER");
-        }
-
         // -- Open new blueprint window
         BeginWindows();
         NewBlueprintPopup nameWindow = GetWindow<NewBlueprintPopup>();
         nameWindow.SetEditor(m_Editor);
+        EndWindows();
+    }
+
+
+    void OpenBlueprint()
+    {
+        BeginWindows();
+        OpenBlueprintPopup openWindow = GetWindow<OpenBlueprintPopup>();
+        openWindow.SetEditor(m_Editor);
         EndWindows();
     }
 
@@ -109,6 +108,7 @@ public class MenuBar : EditorWindow
     }
 
 
+    /*
     private void Save()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(Blueprint), extraTypes);
@@ -135,6 +135,7 @@ public class MenuBar : EditorWindow
             }
         }
     }
+    */
 }
 
 
@@ -151,7 +152,18 @@ public class NewBlueprintPopup : EditorWindow
     }
 
     void OnGUI()
-    {
+    { 
+        // -- check for "assets/blueprints" folder
+        if (Directory.Exists("assets/blueprints"))      // -- can also do AssetDatabase.IsValidFolder
+        {
+            Debug.Log("GOT BLUEPRINTS FOLDER");
+        }
+        else
+        {
+            Directory.CreateDirectory("assets/blueprints");
+            Debug.Log("CREATING BLUEPRINTS FOLDER");
+        }
+
         GUILayout.Space(20);
         GUILayout.Label("ENTER A NAME FOR THE NEW BLUEPRINT", GUILayout.Height(30), GUILayout.ExpandWidth(true));
 
@@ -175,9 +187,9 @@ public class NewBlueprintPopup : EditorWindow
         if (GUILayout.Button("OK"))
         {
             // -- Check name validity
-            if (System.IO.File.Exists("Assets/blueprints/" + newBlueprintName + ".blueprint"))
+            if (System.IO.File.Exists("Assets/blueprints/" + newBlueprintName + "/" + newBlueprintName + ".asset"))
             {
-                errorMsg = "FILE EXISTS!";
+                errorMsg = "BLUEPRINT ALREADY EXISTS!";
             }
             else if (newBlueprintName == "" || newBlueprintName == string.Empty)
             {
@@ -196,6 +208,67 @@ public class NewBlueprintPopup : EditorWindow
                 this.Close();
             }
         }
+        if (GUILayout.Button("Cancel"))
+        {
+            this.Close();
+        }
+    }
+}
+
+
+public class OpenBlueprintPopup : EditorWindow
+{
+    string newBlueprintName = "";
+    BlueprintEditor m_Editor;
+    string errorMsg = "";
+
+    List<Blueprint> knownBlueprints = new List<Blueprint>();
+
+    public void SetEditor(BlueprintEditor _in)
+    {
+        m_Editor = _in;
+
+        knownBlueprints.Clear();
+
+        string[] paths = Directory.GetDirectories("Assets/Blueprints");
+        for (int i = 0; i < paths.GetLength(0); i++)
+        {
+            string bpName = paths[i].Remove(0, 18); // ew #TODO make this not rank, const string paths out and use their length
+
+            Debug.Log("Checking Path : " + paths[i] + "   name : " + bpName );
+
+            Blueprint bp = AssetDatabase.LoadAssetAtPath("Assets/Blueprints/" + bpName + "/" + bpName + ".asset", typeof(Blueprint)) as Blueprint;
+
+            if (bp != null)
+            {
+                knownBlueprints.Add(bp);
+
+                Debug.Log("Adding BP " + bp);
+                Debug.Log("Adding BP name : " + bp.str_Name);
+            }
+            else
+            {
+                Debug.Log("Blueprint was null @ " + i);
+            }
+        }
+    }
+
+    void OnGUI()
+    {
+        GUILayout.Space(10);
+        GUILayout.Label("SELECT BLUEPRINT", GUILayout.Height(30), GUILayout.ExpandWidth(true));
+        GUILayout.Space(10);
+
+        for (int i = 0; i < knownBlueprints.Count; i++)
+        {
+            if (GUILayout.Button(knownBlueprints[i].str_Name))
+            {
+                m_Editor.CurrentBlueprint = knownBlueprints[i];
+                this.Close();
+            }
+        }
+
+
         if (GUILayout.Button("Cancel"))
         {
             this.Close();

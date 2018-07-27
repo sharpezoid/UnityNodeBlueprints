@@ -6,7 +6,7 @@ using System.Text;
 
 // -- REPRESENTATION OF A NODE IN THE TOOL
 [System.Serializable]
-public class Node
+public class Node : ScriptableObject
 {
     // -- THIS NODE TYPE
     public NodeData.NodeType nodeType = NodeData.NodeType.Debug;

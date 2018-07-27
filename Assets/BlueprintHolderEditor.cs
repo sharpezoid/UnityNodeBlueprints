@@ -9,6 +9,7 @@ using System.Collections.Generic;
 [CanEditMultipleObjects]
 public class BlueprintHolderEditor : Editor
 {
+    /*
     SerializedProperty blueprints;
 
     void OnEnable()
@@ -173,4 +174,5 @@ public class BlueprintHolderEditor : Editor
             }
         }
     }
+    */
 }

@@ -8,10 +8,10 @@ using UnityEngine;
 [System.Serializable]
 public class BlueprintHolder : MonoBehaviour
 {
+    //[SerializeField]
+    //public List<Object> objects = new List<Object>();
     [SerializeField]
     public List<Blueprint> blueprints = new List<Blueprint>();
-    [SerializeField][HideInInspector]
-    public List<Object> bps = new List<Object>();
 
     private void Awake()
     {

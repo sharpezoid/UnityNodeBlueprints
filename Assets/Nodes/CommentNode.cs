@@ -9,6 +9,7 @@ public class CommentNode : Node
 {
     bool editing = false;
 
+    [SerializeField]
     public string comment = "Enter comment...";
 
     public CommentNode() : base()

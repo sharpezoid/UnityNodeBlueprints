@@ -68,6 +68,7 @@
     <Compile Include="Assets\BlueprintHolder.cs" />
     <Compile Include="Assets\BlueprintHolderEditor.cs" />
     <Compile Include="Assets\BlueprintPlayer.cs" />
+    <Compile Include="Assets\MakeScriptableBlueprint.cs" />
     <Compile Include="Assets\Node.cs" />
     <Compile Include="Assets\NodeData.cs" />
     <Compile Include="Assets\NodeInput.cs" />

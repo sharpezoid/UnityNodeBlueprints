@@ -6,10 +6,12 @@ using UnityEngine;
 /// Blueprint represents the collection of nodes that we have.
 /// </summary>
 [System.Serializable]
-public class Blueprint
+public class Blueprint : ScriptableObject
 {
-    public string str_Name = "";
+    [SerializeField]
+    public string str_Name = "Error";
 
+    [SerializeField]
     public List<Node> nodes = new List<Node>();
 
     public Blueprint()
