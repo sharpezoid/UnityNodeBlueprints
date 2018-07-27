@@ -38,6 +38,7 @@ public class BlueprintEditor : EditorWindow
             EditorApplication.isPlaying = true;
         }
 
+
         
     }
 
@@ -52,7 +53,10 @@ public class BlueprintEditor : EditorWindow
         m_DraftArea.Init(this);
 
         // -- Check for a selected object
-        CheckSelectionForHolder();
+        CheckSelectionForHolder();        
+        
+        // -- Instantiate a player if one is needed
+        BlueprintPlayer.Instance.InitEditor(this);
     }
 
     /// <summary>
