@@ -31,28 +31,32 @@ public class DraftArea : EditorWindow
     {
         if (!m_Editor){ return; }
         if (m_Editor.CurrentBlueprint == null) { return; }
-        
-        // -- Draw Selection Box
-        GUI.Box(selectionRect, "");
 
-        DrawNodes();
-
-        HandleNodeDrag();
-
-
-
-
-
-        if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
+        // -- DRAW AS IF WE HAVE A BLUEPRINT HOLDER ON CURRENT GAMEOBJECT
+        if (m_Editor.hasHolder)
         {
-            draftState = DraftState.AddingNode;
+            // -- Draw Selection Box
+            GUI.Box(selectionRect, "");
 
-            GenericMenu menu = new GenericMenu();
-            for (int i = 0; i < (int)NodeData.NodeType.COUNT; i++)
+            DrawNodes();
+
+            HandleNodeDrag();
+
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
-                menu.AddItem(new GUIContent(((NodeData.NodeType)i).ToString()), false, AddNodeCallback, (NodeData.NodeType)i);
+                draftState = DraftState.AddingNode;
+
+                GenericMenu menu = new GenericMenu();
+                for (int i = 0; i < (int)NodeData.NodeType.COUNT; i++)
+                {
+                    menu.AddItem(new GUIContent(((NodeData.NodeType)i).ToString()), false, AddNodeCallback, (NodeData.NodeType)i);
+                }
+                menu.ShowAsContext();
             }
-            menu.ShowAsContext();
+        }
+        else
+        {
+            GUI.Box(new Rect(position.x + position.width * 0.25f, position.y + position.height * 0.25f, position.width * 0.75f, position.height * 0.75f), "NO BLUEPRINT HOLDER COMPONENT ON OBJECT, THIS MUST BE ADDED IN EDITOR WHEN STOPPED");
         }
 
         if (Event.current.mousePosition != null)

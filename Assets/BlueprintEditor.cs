@@ -28,9 +28,17 @@ public class BlueprintEditor : EditorWindow
     [MenuItem("Window/Open Blueprint Editor")]
     static void OpenBlueprintEditor()
     {
-        // Get existing open window or if none, make a new one:
+        // -- Get existing open window or if none, make a new one:
         m_Instance = (BlueprintEditor)EditorWindow.GetWindow(typeof(BlueprintEditor));
         m_Instance.Show();
+
+        // -- We need editor to be playing to see changes at run time
+        if (EditorApplication.isPlaying == false)
+        {
+            EditorApplication.isPlaying = true;
+        }
+
+        
     }
 
 
@@ -42,6 +50,27 @@ public class BlueprintEditor : EditorWindow
 
         m_DraftArea = new DraftArea();
         m_DraftArea.Init(this);
+
+        // -- Check for a selected object
+        CheckSelectionForHolder();
+    }
+
+    /// <summary>
+    /// Handle selection of gameobjects in scene
+    /// </summary>
+    public bool hasHolder = false;
+    void OnSelectionChange()
+    {
+        CheckSelectionForHolder();
+    }
+
+    void CheckSelectionForHolder()
+    { 
+        // -- We only check if we have one gameobject. #TODO check for non-modifiable gameobjects and prefabs
+        if (Selection.gameObjects.GetLength(0) == 1)
+        {
+            hasHolder = (Selection.gameObjects[0].GetComponent<BlueprintHolder>() != null);
+        }
     }
 
 
