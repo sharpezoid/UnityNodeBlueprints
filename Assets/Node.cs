@@ -17,10 +17,10 @@ public class Node : ScriptableObject
     // -- TEXTURE FOR RENDERING NODE
     Texture2D texture;
 
-    [HideInInspector]
+    //[HideInInspector]
     public Vector2 sizeDelta = new Vector2(100, 100);
 
-    [HideInInspector]
+    //[HideInInspector]
     public Rect position;
 
     public Node()

@@ -33,8 +33,8 @@ public class DraftArea : EditorWindow
         if (m_Editor.CurrentBlueprint == null) { return; }
 
         // -- DRAW AS IF WE HAVE A BLUEPRINT HOLDER ON CURRENT GAMEOBJECT
-        if (m_Editor.hasHolder)
-        {
+      //  if (m_Editor.hasHolder)
+      //  {
             // -- Draw Selection Box
             GUI.Box(selectionRect, "");
 
@@ -53,11 +53,11 @@ public class DraftArea : EditorWindow
                 }
                 menu.ShowAsContext();
             }
-        }
-        else
-        {
-            GUI.Box(new Rect(position.x + position.width * 0.25f, position.y + position.height * 0.25f, position.width * 0.75f, position.height * 0.75f), "NO BLUEPRINT HOLDER COMPONENT ON OBJECT, THIS MUST BE ADDED IN EDITOR WHEN STOPPED");
-        }
+        //}
+        //else
+        //{
+        //    GUI.Box(new Rect(position.x + position.width * 0.25f, position.y + position.height * 0.25f, position.width * 0.75f, position.height * 0.75f), "NO BLUEPRINT HOLDER COMPONENT ON OBJECT, THIS MUST BE ADDED IN EDITOR WHEN STOPPED");
+        //}
 
         if (Event.current.mousePosition != null)
         {
@@ -218,7 +218,11 @@ public class DraftArea : EditorWindow
     {
         for (int nLoop = 0; nLoop < m_Editor.CurrentBlueprint.nodes.Count; nLoop++)
         {
-            m_Editor.CurrentBlueprint.nodes[nLoop].Draw();
+            // -- there could be a null entry so check for it
+            if (m_Editor.CurrentBlueprint.nodes[nLoop])
+            {
+                m_Editor.CurrentBlueprint.nodes[nLoop].Draw();
+            }
         }
     }
 }

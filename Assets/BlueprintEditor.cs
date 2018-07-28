@@ -31,12 +31,6 @@ public class BlueprintEditor : EditorWindow
         // -- Get existing open window or if none, make a new one:
         m_Instance = (BlueprintEditor)EditorWindow.GetWindow(typeof(BlueprintEditor));
         m_Instance.Show();
-
-        // -- We need editor to be playing to see changes at run time
-        if (EditorApplication.isPlaying == false)
-        {
-            EditorApplication.isPlaying = true;
-        } 
     }
 
 
