@@ -17,12 +17,12 @@ public class CommentNode : Node
 
     }
 
-    public CommentNode(Vector2 _pos) : base(_pos)
-    {
-        position = new Rect(_pos, new Vector2(100, 30));
-        color = Color.gray;
-        nodeType = NodeData.NodeType.Comment;
-    }
+    //public CommentNode(Vector2 _pos) : base(_pos)
+    //{
+    //    position = new Rect(_pos, new Vector2(100, 30));
+    //    color = Color.gray;
+    //    nodeType = NodeData.NodeType.Comment;
+    //}
 
     public override void Draw()
     {

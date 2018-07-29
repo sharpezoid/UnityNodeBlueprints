@@ -21,6 +21,8 @@ public class BlueprintEditor : EditorWindow
         set { currentBlueprint = value; }
     }
 
+    // -- ALWAYS ON JUST NOW TILL I HAVE BETTER MEANS OF HANDLING THIS
+    bool unsavedChanges = true;
 
     /// <summary>
     /// Open Blueprint Editor window from inside unity
@@ -32,7 +34,6 @@ public class BlueprintEditor : EditorWindow
         m_Instance = (BlueprintEditor)EditorWindow.GetWindow(typeof(BlueprintEditor));
         m_Instance.Show();
     }
-
 
     private void OnEnable()
     {
@@ -96,5 +97,27 @@ public class BlueprintEditor : EditorWindow
         
         // bolt you
         Resources.UnloadUnusedAssets();
+    }
+
+    public void SaveCurrentBlueprint()
+    {
+        EditorUtility.SetDirty(CurrentBlueprint);
+        for (int i = 0; i < CurrentBlueprint.nodes.Count; i++)
+        {
+            EditorUtility.SetDirty(CurrentBlueprint.nodes[i]);
+        }
+
+        AssetDatabase.SaveAssets();
+    }
+
+    void OnDestroy()
+    {
+        if (unsavedChanges)
+        {
+            if (EditorUtility.DisplayDialog("Unsaved Changes", "There are unsaved changes in the current blueprint, would you like to save?", "Yes", "No"))
+            {
+                SaveCurrentBlueprint();
+            }
+        }
     }
 }

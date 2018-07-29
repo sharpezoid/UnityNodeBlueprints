@@ -32,32 +32,24 @@ public class DraftArea : EditorWindow
         if (!m_Editor){ return; }
         if (m_Editor.CurrentBlueprint == null) { return; }
 
-        // -- DRAW AS IF WE HAVE A BLUEPRINT HOLDER ON CURRENT GAMEOBJECT
-      //  if (m_Editor.hasHolder)
-      //  {
-            // -- Draw Selection Box
-            GUI.Box(selectionRect, "");
+        //--Draw Selection Box
+        GUI.Box(selectionRect, "");
 
-            DrawNodes();
+        DrawNodes();
 
-            HandleNodeDrag();
+        HandleNodeDrag();
 
-            if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
+        if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
+        {
+            draftState = DraftState.AddingNode;
+
+            GenericMenu menu = new GenericMenu();
+            for (int i = 0; i < (int)NodeData.NodeType.COUNT; i++)
             {
-                draftState = DraftState.AddingNode;
-
-                GenericMenu menu = new GenericMenu();
-                for (int i = 0; i < (int)NodeData.NodeType.COUNT; i++)
-                {
-                    menu.AddItem(new GUIContent(((NodeData.NodeType)i).ToString()), false, AddNodeCallback, (NodeData.NodeType)i);
-                }
-                menu.ShowAsContext();
+                menu.AddItem(new GUIContent(((NodeData.NodeType)i).ToString()), false, AddNodeCallback, (NodeData.NodeType)i);
             }
-        //}
-        //else
-        //{
-        //    GUI.Box(new Rect(position.x + position.width * 0.25f, position.y + position.height * 0.25f, position.width * 0.75f, position.height * 0.75f), "NO BLUEPRINT HOLDER COMPONENT ON OBJECT, THIS MUST BE ADDED IN EDITOR WHEN STOPPED");
-        //}
+            menu.ShowAsContext();
+        }
 
         if (Event.current.mousePosition != null)
         {
@@ -84,11 +76,6 @@ public class DraftArea : EditorWindow
             for (int nLoop = 0; nLoop < m_Editor.CurrentBlueprint.nodes.Count; nLoop++)
             {
                 Node n = m_Editor.CurrentBlueprint.nodes[nLoop];
-
-                if (n.IsDisplayingComment)
-                {
-                    n.HideComment();
-                }
 
                 if (n.position.Contains(Event.current.mousePosition))
                 {
@@ -158,7 +145,7 @@ public class DraftArea : EditorWindow
                     selectionRect.y = mouseDownPos.y;
                 }
 
-                Debug.Log("SELECTION RECT : " + selectionRect);
+                //Debug.Log("SELECTION RECT : " + selectionRect);
 
                 // -- IF INSIDE THE RECTANGLE, SELECT THE NODE
                 foreach (Node n in m_Editor.CurrentBlueprint.nodes)
@@ -187,30 +174,61 @@ public class DraftArea : EditorWindow
     {
         NodeData.NodeType _type = (NodeData.NodeType)userData;
 
+        int count = 0;
+        foreach (Node _n in m_Editor.CurrentBlueprint.nodes)
+        {
+            if (_n.nodeType == _type) { count++; }
+        }
+
+        Node n = null;
+
         switch (_type)
         {
             case NodeData.NodeType.Comment:
-                m_Editor.CurrentBlueprint.nodes.Add(new CommentNode(mousePos));
+                n = ScriptableObject.CreateInstance<CommentNode>(); 
                 break;
 
             case NodeData.NodeType.Debug:
-                //m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+                //n = ScriptableObject.CreateInstance<CommentNode>();
                 break;
 
             case NodeData.NodeType.Event:
-                //m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+                n = ScriptableObject.CreateInstance<EventNode>();
                 break;
 
             case NodeData.NodeType.Function:
-                //m_Editor.CurrentBlueprint.nodes.Add(new Node(mousePos));
+               // n = ScriptableObject.CreateInstance<CommentNode>();
                 break;
 
             case NodeData.NodeType.Variable:
-                m_Editor.CurrentBlueprint.nodes.Add(new VariableNode(mousePos));
+                //n = ScriptableObject.CreateInstance<CommentNode>();
                 break;
         }
 
+        n.InitNode(mousePos, _type);
+        AssetDatabase.CreateAsset(n, "Assets/Blueprints/" + m_Editor.CurrentBlueprint.str_Name + "/nodes/" + _type.ToString() + "Node_" + count.ToString() + ".asset");
+        AssetDatabase.SaveAssets();
+
+        m_Editor.CurrentBlueprint.nodes.Add(n);
+
+        m_Editor.SaveCurrentBlueprint();
+
         draftState = DraftState.Default;
+    }
+
+    void CreateCommentNode()
+    {
+        // -- check for existing comment nodes to number this node
+        int count = 0;
+        foreach (Node n in m_Editor.CurrentBlueprint.nodes)
+        {
+            if (n.nodeType == NodeData.NodeType.Comment) { count++; }
+        }
+        CommentNode asset = ScriptableObject.CreateInstance<CommentNode>();
+        asset.InitNode(mousePos, NodeData.NodeType.Comment);
+        AssetDatabase.CreateAsset(asset, "Assets/Blueprints/" + m_Editor.CurrentBlueprint.str_Name + "/nodes/CommentNode_" + count.ToString() + ".asset");
+        AssetDatabase.SaveAssets();
+        m_Editor.CurrentBlueprint.nodes.Add(asset);
     }
 
 

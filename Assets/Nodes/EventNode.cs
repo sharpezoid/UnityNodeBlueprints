@@ -8,17 +8,17 @@ using System.Text;
 public class EventNode : Node
 {
     #region Constructors
-    public EventNode() : base()
-    {
+    //public EventNode() : base()
+    //{
 
-    }
+    //}
 
-    public EventNode(Vector2 _pos) : base(_pos)
-    {
-        position = new Rect(_pos, new Vector2(100, 30));
-        color = Color.red;
-        nodeType = NodeData.NodeType.Comment;
-    }
+    //public EventNode(Vector2 _pos) : base(_pos)
+    //{
+    //    position = new Rect(_pos, new Vector2(100, 30));
+    //    color = Color.red;
+    //    nodeType = NodeData.NodeType.Comment;
+    //}
     #endregion
 
     public override void Draw()

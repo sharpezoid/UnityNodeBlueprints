@@ -60,7 +60,7 @@ public class MenuBar : EditorWindow
         menu.AddItem(new GUIContent("New Blueprint"), false, CreateNewBlueprint);
         menu.AddItem(new GUIContent("Open Blueprint"), false, OpenBlueprint);
         menu.AddSeparator("");
-        //menu.AddItem(new GUIContent("Save"), false, Save);
+        menu.AddItem(new GUIContent("Save"), false, Save);
         menu.ShowAsContext();
     }
 
@@ -78,7 +78,7 @@ public class MenuBar : EditorWindow
         menu.ShowAsContext();
     }
 
-
+    #region callbacks
     void CreateNewBlueprint()
     {
         // -- Open new blueprint window
@@ -88,13 +88,17 @@ public class MenuBar : EditorWindow
         EndWindows();
     }
 
-
     void OpenBlueprint()
     {
         BeginWindows();
         OpenBlueprintPopup openWindow = GetWindow<OpenBlueprintPopup>();
         openWindow.SetEditor(m_Editor);
         EndWindows();
+    }
+
+    private void Save()
+    {
+        m_Editor.SaveCurrentBlueprint();
     }
 
     void ShowPreferencesWindow()
@@ -106,10 +110,10 @@ public class MenuBar : EditorWindow
     {
         // -- #TODO Show info window about the tool and licensing etc...
     }
-
+    #endregion
 
     /*
-    private void Save()
+    private void XMLSave()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(Blueprint), extraTypes);
         StreamWriter writer = new StreamWriter(Application.dataPath + "/Blueprints/" + m_Editor.CurrentBlueprint.str_Name + ".blueprint");
@@ -117,7 +121,7 @@ public class MenuBar : EditorWindow
         writer.Close();
     }
 
-    private void Open()
+    private void XMLOpen()
     {
         string path = EditorUtility.OpenFilePanel("Open Blueprint", "Assets/blueprints", "blueprint");
 

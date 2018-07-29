@@ -23,33 +23,11 @@ public class Node : ScriptableObject
     //[HideInInspector]
     public Rect position;
 
-    public Node()
+    public void InitNode(Vector2 pos, NodeData.NodeType _type)
     {
-
+        position = new Rect(pos, sizeDelta);
+        nodeType = _type;
     }
-
-    public Node(Vector2 _pos)       // public so xml can serialise...
-    {
-        position = new Rect(_pos, sizeDelta);
-    }
-
-
-    // -- editable comment on the node
-    public string nodeComment = "Write Node Comment Here...";
-    private bool isDisplayingComment = false;
-    public bool IsDisplayingComment
-    {
-        get { return isDisplayingComment; }
-    }
-    public void DisplayComment()
-    {
-        isDisplayingComment = true;
-    }
-    public void HideComment()
-    {
-        isDisplayingComment = false;
-    }
-
 
     // -- node selection toggle
     private bool isSelected = false;
@@ -71,21 +49,8 @@ public class Node : ScriptableObject
     public void Deselect()
     {
         isSelected = false;
-        // -- hide comment if open
-        isDisplayingComment = false;
     }
 
-
-    //public List<NodeConnection> connections = new List<NodeConnection>();
-    //public class NodeConnection
-    //{
-    //    public int targetNodeIndex = 0;
-        
-    //    public NodeConnection(int newIndex)
-    //    {
-    //        targetNodeIndex = newIndex;
-    //    }
-    //}
 
     public virtual void Draw()
     {
