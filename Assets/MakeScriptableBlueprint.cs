@@ -44,4 +44,17 @@ public class MakeScriptableBlueprint
 
         Selection.activeObject = asset;
     }
+
+    [MenuItem("Assets/Create/Make Node Editor GUI Styles")]
+    public static void CreateGUIStyle()
+    {
+        CommentNode asset = ScriptableObject.CreateInstance<CommentNode>();
+
+        AssetDatabase.CreateAsset(asset, "Assets/Blueprints/Node.asset");
+        AssetDatabase.SaveAssets();
+
+        EditorUtility.FocusProjectWindow();
+
+        Selection.activeObject = asset;
+    }
 }

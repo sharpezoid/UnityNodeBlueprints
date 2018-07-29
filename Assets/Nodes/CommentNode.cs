@@ -12,17 +12,42 @@ public class CommentNode : Node
     [SerializeField]
     public string comment = "Enter comment...";
 
-    public CommentNode() : base()
+    private void OnEnable()
     {
+        Texture2D texture = new Texture2D(1, 1);
+        texture.SetPixel(0, 0, color);
 
+        style = new GUIStyle();
+        style.normal.background = texture;
+       // style.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
+        style.border = new RectOffset(6, 6, 6, 6);
     }
 
-    //public CommentNode(Vector2 _pos) : base(_pos)
-    //{
-    //    position = new Rect(_pos, new Vector2(100, 30));
-    //    color = Color.gray;
-    //    nodeType = NodeData.NodeType.Comment;
-    //}
+    public override bool ProcessEvents(Event e)
+    {
+        base.ProcessEvents(e);
+
+        switch (e.type)
+        {
+            case EventType.MouseDown:
+                if (e.button == 0)
+                {
+                    if (position.Contains(e.mousePosition) && e.clickCount > 1)
+                    {
+                        editing = true;
+                        GUI.changed = true;
+                    }
+                    else
+                    {
+                        editing = false;
+                        GUI.changed = true;
+                    }
+                }
+                break;
+        }
+
+        return false;
+    }
 
     public override void Draw()
     {
@@ -36,22 +61,6 @@ public class CommentNode : Node
         {
             // -- DRAW THE REST OF THE NODE
             EditorGUI.HelpBox(position, comment, MessageType.Info);
-        }
-
-        if (Event.current.clickCount > 1)
-        {
-            if (position.Contains(Event.current.mousePosition))
-            {
-                Debug.Log("GOT DOUBLE CLICK? " + Event.current.clickCount.ToString() );
-                editing = true;
-            }
-        }
-        else if(Event.current.type == EventType.MouseDown && Event.current.button == 0)
-        {
-            if (position.Contains(Event.current.mousePosition))
-            {
-                editing = false;
-            }
         }
     }
 }

@@ -23,32 +23,58 @@ public class Node : ScriptableObject
     //[HideInInspector]
     public Rect position;
 
-    public void InitNode(Vector2 pos, NodeData.NodeType _type)
+    protected GUIStyle style;
+    
+    //// -- node selection toggle
+    private bool isSelected = false;
+    private bool isDragged = false;
+    public bool IsSelected
+    {
+        get { return isSelected; }
+    }
+
+    public virtual void InitNode(Vector2 pos, NodeData.NodeType _type)
     {
         position = new Rect(pos, sizeDelta);
         nodeType = _type;
     }
 
-    // -- node selection toggle
-    private bool isSelected = false;
-    public bool IsSelected
+    public virtual bool ProcessEvents(Event e)
     {
-        get { return isSelected; }
-    }
-    public void Select(Blueprint _blueprint, bool deselectOtherNodes = false)
-    {
-        if (deselectOtherNodes)
+        switch (e.type)
         {
-            foreach (Node n in _blueprint.nodes)
-            {
-                n.Deselect();
-            }
+            case EventType.MouseDown:
+                if (e.button == 0)
+                {
+                    if (position.Contains(e.mousePosition))
+                    {
+                        isSelected = true;
+                        GUI.changed = true;
+                    }
+                    else
+                    {
+                        isSelected = false;
+                        GUI.changed = true;
+                    }
+                }
+                break;
+
+            case EventType.MouseUp:
+                isDragged = false;
+                break;
+
+            case EventType.MouseDrag:
+                if (e.button == 0 && IsSelected)
+                {
+                    isDragged = true;
+                    position.position += e.delta;
+                    e.Use();
+                    return true;
+                }
+                break;
         }
-        isSelected = true;
-    }
-    public void Deselect()
-    {
-        isSelected = false;
+
+        return false;
     }
 
 
@@ -59,29 +85,31 @@ public class Node : ScriptableObject
             texture = new Texture2D(1, 1);
         }
 
-        // -- DRAW DROP SHADOW
-        texture.SetPixel(0, 0, new Color(0.1f, 0.1f, 0.1f, 0.15f));
-        texture.Apply();
-        GUI.DrawTexture(new Rect(position.x + 3, position.y + 3, position.width, position.height), texture);
+        GUI.Box(position, "");//, style);
 
-        // -- DRAW THE OUTLINE  W/WO selection
-        if (IsSelected)
-        {
-            texture.SetPixel(0, 0, Color.yellow);
-            texture.Apply();
-            GUI.DrawTexture(position, texture);
-        }
-        else
-        {
-            texture.SetPixel(0, 0, Color.white); //#TODO Tool Option for colours of nodes 
-            texture.Apply();
-            GUI.DrawTexture(position, texture);
-        }
+        //// -- DRAW DROP SHADOW
+        //texture.SetPixel(0, 0, new Color(0.1f, 0.1f, 0.1f, 0.15f));
+        //texture.Apply();
+        //GUI.DrawTexture(new Rect(position.x + 3, position.y + 3, position.width, position.height), texture);
 
-        // -- DRAW THE MAIN PANEL OF THE NODE
-        texture.SetPixel(0, 0, color);
-        texture.Apply();
-        GUI.DrawTexture(new Rect(position.x + 1, position.y + 1, position.width -2, position.height -2), texture);
+        //// -- DRAW THE OUTLINE  W/WO selection
+        //if (IsSelected)
+        //{
+        //    texture.SetPixel(0, 0, Color.yellow);
+        //    texture.Apply();
+        //    GUI.DrawTexture(position, texture);
+        //}
+        //else
+        //{
+        //    texture.SetPixel(0, 0, Color.white); //#TODO Tool Option for colours of nodes 
+        //    texture.Apply();
+        //    GUI.DrawTexture(position, texture);
+        //}
+
+        //// -- DRAW THE MAIN PANEL OF THE NODE
+        //texture.SetPixel(0, 0, color);
+        //texture.Apply();
+        //GUI.DrawTexture(new Rect(position.x + 1, position.y + 1, position.width -2, position.height -2), texture);
 
         // -- OVERRIDE THIS CLASS AND CALL THE BASE FIRST THEN RENDER OWN THINGS ON THE PANEL
 

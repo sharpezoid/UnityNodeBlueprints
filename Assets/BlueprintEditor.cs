@@ -80,13 +80,10 @@ public class BlueprintEditor : EditorWindow
 
         // -- DRAW ALL OF THE TOOL PARTS IN CONSTITUENT WINDOWS
         BeginWindows();
-
         // -- DRAW THE MENU BAR
         m_MenuBar.Draw();
-
         // -- DRAW THE DRAFT AREA
         m_DraftArea.Draw();
-
         EndWindows();
 
         // Repaint the window as wantsMouseMove doesnt trigger a repaint automatically
@@ -99,6 +96,7 @@ public class BlueprintEditor : EditorWindow
         Resources.UnloadUnusedAssets();
     }
 
+
     public void SaveCurrentBlueprint()
     {
         EditorUtility.SetDirty(CurrentBlueprint);
@@ -109,6 +107,7 @@ public class BlueprintEditor : EditorWindow
 
         AssetDatabase.SaveAssets();
     }
+
 
     void OnDestroy()
     {
