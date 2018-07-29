@@ -12,6 +12,14 @@ public class BlueprintEditor : EditorWindow
     // -- TOOL PARTS
     public static MenuBar m_MenuBar = null;                 // -- TOP BAR OF HIGH LEVEL CONTROLS
     public static DraftArea m_DraftArea = null;        // -- NODE WORKING AREA
+    public MenuBar MenuBar
+    {
+        get { return m_MenuBar; }
+    }
+    public DraftArea DraftArea
+    {
+        get { return m_DraftArea; }
+    }
 
     // -- OUR CURRENT BLUEPRINT
     private Blueprint currentBlueprint;
@@ -87,7 +95,7 @@ public class BlueprintEditor : EditorWindow
         EndWindows();
 
         // Repaint the window as wantsMouseMove doesnt trigger a repaint automatically
-        if (Event.current != null)
+        if (Event.current != null || GUI.changed)
         {
             Repaint();
         }

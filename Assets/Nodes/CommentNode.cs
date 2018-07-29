@@ -12,17 +12,6 @@ public class CommentNode : Node
     [SerializeField]
     public string comment = "Enter comment...";
 
-    private void OnEnable()
-    {
-        Texture2D texture = new Texture2D(1, 1);
-        texture.SetPixel(0, 0, color);
-
-        style = new GUIStyle();
-        style.normal.background = texture;
-       // style.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
-        style.border = new RectOffset(6, 6, 6, 6);
-    }
-
     public override bool ProcessEvents(Event e)
     {
         base.ProcessEvents(e);

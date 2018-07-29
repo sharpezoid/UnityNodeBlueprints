@@ -15,19 +15,18 @@ public class FlowConnector
     {
         Input,
         Output
-        // Both?  we should have 2 flowconnectors instead
     }
     public FlowType flowType = FlowType.Output;
 
     public Node node;
 
-    public Action<FlowConnector> OnClickFlowConnector;
+    public Action<FlowConnector> OnDragConnector;
 
-    public FlowConnector(Node _node, FlowType _type)//, Action<FlowConnector> _OnClickFlowConnector)
+    public FlowConnector(Node _node, FlowType _type, Action<FlowConnector> _OnDragConnector)
     {
         node = _node;
         flowType = _type;
-        //OnClickFlowConnector = _OnClickFlowConnector;
+        OnDragConnector = _OnDragConnector;
         position = new Rect(0, 0, 10f, 20f);
     }
 
@@ -46,11 +45,16 @@ public class FlowConnector
                 break;
         }
 
-        if (GUI.Button(position, ""))//, style))
+        if (GUI.Button(position, ">"))//, style))
         {
-            if (OnClickFlowConnector != null)
+            if (OnDragConnector != null)
             {
-                OnClickFlowConnector(this);
+                Debug.Log("GETTING > AND DRAG CONNECTOR EXISTS");
+                OnDragConnector(this);
+            }
+            else
+            {
+                Debug.Log("GETTING > AND DRAG CONNECTOR IS NULL");
             }
         }
     }

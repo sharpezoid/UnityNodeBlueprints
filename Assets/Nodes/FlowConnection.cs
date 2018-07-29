@@ -12,6 +12,7 @@ public class FlowConnection
 {
     public FlowConnector inPoint;
     public FlowConnector outPoint;
+
     public Action<FlowConnection> OnClickRemoveConnection;
 
     public FlowConnection(FlowConnector _inPoint, FlowConnector _outPoint, Action<FlowConnection> _OnClickRemoveConnection)

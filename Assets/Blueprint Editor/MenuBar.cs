@@ -206,8 +206,11 @@ public class NewBlueprintPopup : EditorWindow
             else
             {
                 // -- create the asset and save it
-                Blueprint newBlueprint = new Blueprint{str_Name = newBlueprintName};
-                m_Editor.CurrentBlueprint = newBlueprint;
+                Blueprint asset = ScriptableObject.CreateInstance<Blueprint>();
+
+                AssetDatabase.CreateAsset(asset, "Assets/Blueprints/" + newBlueprintName + ".asset");
+                AssetDatabase.SaveAssets();
+                m_Editor.CurrentBlueprint = asset;
 
                 this.Close();
             }
@@ -271,7 +274,6 @@ public class OpenBlueprintPopup : EditorWindow
                 this.Close();
             }
         }
-
 
         if (GUILayout.Button("Cancel"))
         {

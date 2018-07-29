@@ -12,4 +12,15 @@ MonoBehaviour:
   m_Name: Derp
   m_EditorClassIdentifier: 
   str_Name: Derp
-  nodes: []
+  nodes:
+  - {fileID: 11400000, guid: 3ae8f3ab1344a58439fc84cc7f2199ca, type: 2}
+  - {fileID: 11400000, guid: 6257e4f6ef679784b85e5fd01f3e924e, type: 2}
+  - {fileID: 11400000, guid: c0c56f01c7feda54286bd2c3c14fe0ce, type: 2}
+  - {fileID: 11400000, guid: 1d3252233862e184790853bbf8ffe74c, type: 2}
+  - {fileID: 11400000, guid: a7f5013b0aeda46449d0efd69445c52e, type: 2}
+  - {fileID: 11400000, guid: 56cb7abd34e428747bd87d769c0ba0b8, type: 2}
+  - {fileID: 11400000, guid: f6e3a49d48b12f54faca318cef0d3529, type: 2}
+  - {fileID: 11400000, guid: 19539931d701a674b84053d21cc109a8, type: 2}
+  - {fileID: 11400000, guid: c0f756903bd0c904782bf24443000dc1, type: 2}
+  - {fileID: 11400000, guid: 41c66671e1dc9fb439dc6e69b92b7222, type: 2}
+  connections: []

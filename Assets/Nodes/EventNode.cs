@@ -10,11 +10,6 @@ public class EventNode : Node
 {
     public FlowConnector outPoint;
 
-    public void OnEnable()
-    {
-        outPoint = new FlowConnector(this, FlowConnector.FlowType.Output);
-    }
-
     public override void Draw()
     {
         base.Draw();
@@ -23,19 +18,11 @@ public class EventNode : Node
         {
             outPoint.Draw();
         }
-
-        if (Event.current.clickCount > 1)
+        else
         {
-            if (position.Contains(Event.current.mousePosition))
+            if (m_Editor != null && m_Editor.DraftArea != null)
             {
-                Debug.Log("GOT DOUBLE CLICK? " + Event.current.clickCount.ToString() );
-            }
-        }
-        else if(Event.current.type == EventType.MouseDown && Event.current.button == 0)
-        {
-            if (position.Contains(Event.current.mousePosition))
-            {
-                Debug.Log("Clicking Event Node");
+                outPoint = new FlowConnector(this, FlowConnector.FlowType.Output, m_Editor.DraftArea.OnDragConnector);
             }
         }
     }

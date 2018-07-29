@@ -39,6 +39,8 @@ public class DraftArea : EditorWindow
 
         ProcessEvents(Event.current);
         ProcessNodeEvents(Event.current);
+
+        DrawConnectionLine(Event.current);
     }
 
 
@@ -76,23 +78,83 @@ public class DraftArea : EditorWindow
         }
     }
 
-    private void OnClickOutPoint(FlowConnector outPoint)
+    public void OnDragConnector(FlowConnector outPoint)
     {
+        Debug.Log("DRAG CONNECTOR!");
         selectedOutPoint = outPoint;
 
         if (selectedInPoint != null)
         {
             if (selectedOutPoint.node != selectedInPoint.node)
             {
-                //CreateConnection();
-               // ClearConnectionSelection();
+               CreateConnection();
+
+               //ClearConnectionSelection();
             }
             else
             {
-               // ClearConnectionSelection();
+               //ClearConnectionSelection();
             }
         }
     }
+
+    private void CreateConnection()
+    {
+        if (m_Editor.CurrentBlueprint.connections == null)
+        {
+            m_Editor.CurrentBlueprint.connections = new List<FlowConnection>();
+        }
+
+        m_Editor.CurrentBlueprint.connections.Add(new FlowConnection(selectedInPoint, selectedOutPoint, OnClickRemoveConnection));
+    }
+
+    private void OnClickRemoveConnection(FlowConnection connection)
+    {
+        m_Editor.CurrentBlueprint.connections.Remove(connection);
+    }
+
+    private void DrawConnectionLine(Event e)
+    {
+        if (selectedInPoint != null && selectedOutPoint == null)
+        {
+            Handles.DrawBezier(
+                selectedInPoint.position.center,
+                e.mousePosition,
+                selectedInPoint.position.center + Vector2.left * 50f,
+                e.mousePosition - Vector2.left * 50f,
+                Color.white,
+                null,
+                2f
+            );
+
+            GUI.changed = true;
+        }
+
+        if (selectedOutPoint != null && selectedInPoint == null)
+        {
+            Handles.DrawBezier(
+                selectedOutPoint.position.center,
+                e.mousePosition,
+                selectedOutPoint.position.center - Vector2.left * 50f,
+                e.mousePosition + Vector2.left * 50f,
+                Color.white,
+                null,
+                2f
+            );
+
+            GUI.changed = true;
+        }
+    }
+
+    //private void CreateConnection()
+    //{
+    //    if (connections == null)
+    //    {
+    //        connections = new List<Connection>();
+    //    }
+
+    //    connections.Add(new Connection(selectedInPoint, selectedOutPoint, OnClickRemoveConnection));
+    //}
 
 
 
@@ -243,7 +305,7 @@ public class DraftArea : EditorWindow
                 break;
         }
 
-        n.InitNode(mousePos, _type);
+        n.InitNodeEditor(mousePos, _type, m_Editor);
         AssetDatabase.CreateAsset(n, "Assets/Blueprints/" + m_Editor.CurrentBlueprint.str_Name + "/nodes/" + _type.ToString() + "Node_" + count.ToString() + ".asset");
         AssetDatabase.SaveAssets();
 
