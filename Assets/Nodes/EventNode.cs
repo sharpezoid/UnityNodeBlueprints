@@ -8,8 +8,10 @@ using System;
 [System.Serializable]
 public class EventNode : Node
 {
-    public FlowConnector inPoint;
-    public FlowConnector outPoint;
+    [NonSerialized]
+    FlowConnector inPoint = null;
+    [NonSerialized]
+    FlowConnector outPoint = null;
 
     public override void Draw()
     {

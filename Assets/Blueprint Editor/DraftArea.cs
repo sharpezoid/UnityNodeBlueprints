@@ -101,7 +101,6 @@ public class DraftArea : EditorWindow
 
     public void OnStopDragConnector(FlowConnector outPoint)
     {
-        Debug.Log("STOP DRAG CONNECTOR!");
         selectedOutPoint = null;
     }
 
