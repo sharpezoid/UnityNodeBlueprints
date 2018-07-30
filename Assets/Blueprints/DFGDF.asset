@@ -9,10 +9,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5478083b8d2842f4288cdac697511625, type: 3}
-  m_Name: Derp
+  m_Name: DFGDF
   m_EditorClassIdentifier: 
-  str_Name: Derp
-  nodes:
-  - {fileID: 11400000, guid: 3ae8f3ab1344a58439fc84cc7f2199ca, type: 2}
-  - {fileID: 11400000, guid: 76a0fea735f1dcd4092f99d07395f39d, type: 2}
+  str_Name: Error
+  nodes: []
   connections: []

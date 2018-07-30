@@ -21,12 +21,14 @@ public class FlowConnector
     public Node node;
 
     public Action<FlowConnector> OnDragConnector;
+    public Action<FlowConnector> OnStopDragConnector;
 
-    public FlowConnector(Node _node, FlowType _type, Action<FlowConnector> _OnDragConnector)
+    public FlowConnector(Node _node, FlowType _type, Action<FlowConnector> _OnDragConnector, Action<FlowConnector> _OnStopDragConnector)
     {
         node = _node;
         flowType = _type;
         OnDragConnector = _OnDragConnector;
+        OnStopDragConnector = _OnStopDragConnector;
         position = new Rect(0, 0, 10f, 20f);
     }
 
@@ -45,17 +47,40 @@ public class FlowConnector
                 break;
         }
 
-        if (GUI.Button(position, ">"))//, style))
+        GUI.Box(position, new GUIContent(">"));
+
+        ProcessEvents(Event.current);
+    }
+
+
+    private void ProcessEvents(Event e)
+    {
+        switch (e.type)
         {
-            if (OnDragConnector != null)
-            {
-                Debug.Log("GETTING > AND DRAG CONNECTOR EXISTS");
-                OnDragConnector(this);
-            }
-            else
-            {
-                Debug.Log("GETTING > AND DRAG CONNECTOR IS NULL");
-            }
+            case EventType.MouseDown:
+                if (e.button == 0 && position.Contains(e.mousePosition))
+                {
+                    if (OnDragConnector != null)
+                    {
+                        Debug.Log("GETTING > AND DRAG CONNECTOR EXISTS");
+                        OnDragConnector(this);
+                    }
+
+                    // -- Consume event
+                    e.Use();
+                }
+                break;
+
+            case EventType.MouseUp:
+                if (e.button == 0)
+                {
+                    if (OnStopDragConnector != null)
+                    {
+                        Debug.Log("STOP DRAG OF CONNECTOR");
+                        OnStopDragConnector(this);
+                    }
+                }
+                break;
         }
     }
 }

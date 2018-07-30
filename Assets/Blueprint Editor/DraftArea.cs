@@ -83,20 +83,28 @@ public class DraftArea : EditorWindow
         Debug.Log("DRAG CONNECTOR!");
         selectedOutPoint = outPoint;
 
+        // -- Deselect any nodes so as to not drag selected nodes...
+        DeselectAllNodes();
+
         if (selectedInPoint != null)
         {
             if (selectedOutPoint.node != selectedInPoint.node)
             {
                CreateConnection();
-
-               //ClearConnectionSelection();
             }
             else
             {
-               //ClearConnectionSelection();
+
             }
         }
     }
+
+    public void OnStopDragConnector(FlowConnector outPoint)
+    {
+        Debug.Log("STOP DRAG CONNECTOR!");
+        selectedOutPoint = null;
+    }
+
 
     private void CreateConnection()
     {
@@ -108,10 +116,12 @@ public class DraftArea : EditorWindow
         m_Editor.CurrentBlueprint.connections.Add(new FlowConnection(selectedInPoint, selectedOutPoint, OnClickRemoveConnection));
     }
 
+
     private void OnClickRemoveConnection(FlowConnection connection)
     {
         m_Editor.CurrentBlueprint.connections.Remove(connection);
     }
+
 
     private void DrawConnectionLine(Event e)
     {
@@ -145,129 +155,6 @@ public class DraftArea : EditorWindow
             GUI.changed = true;
         }
     }
-
-    //private void CreateConnection()
-    //{
-    //    if (connections == null)
-    //    {
-    //        connections = new List<Connection>();
-    //    }
-
-    //    connections.Add(new Connection(selectedInPoint, selectedOutPoint, OnClickRemoveConnection));
-    //}
-
-
-
-    //bool draggingSelectionRect = false;
-    //Vector2 mouseDownPos;
-    //Rect selectionRect;
-    ///// <summary>
-    ///// Node Selection and Drag handler
-    ///// </summary>
-    //void HandleNodeDrag()
-    //{
-    //    // -- TRY TO SELECT A NODE
-    //    if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
-    //    {
-    //        Debug.Log("LEFT MOUSE DOWN");
-
-    //        bool clickedOnANode = false;
-    //        // -- GOT A CLICK
-    //        for (int nLoop = 0; nLoop < m_Editor.CurrentBlueprint.nodes.Count; nLoop++)
-    //        {
-    //            Node n = m_Editor.CurrentBlueprint.nodes[nLoop];
-
-    //            if (n.position.Contains(Event.current.mousePosition))
-    //            {
-    //                clickedOnANode = true;
-    //                if (!n.IsSelected)
-    //                {
-    //                    n.Select(m_Editor.CurrentBlueprint, true);
-    //                }
-    //            }
-    //        }
-    //        if (!clickedOnANode)
-    //        {
-    //            foreach (Node n in m_Editor.CurrentBlueprint.nodes)
-    //            {
-    //                n.Deselect();
-    //            }
-    //        }
-
-    //        // -- SET SELECTION RECT INITIAL X,Y
-    //        mouseDownPos = Event.current.mousePosition;
-    //    }
-    //    // -- TRY TO DRAG A NODE...
-    //    else if (Event.current.type == EventType.MouseDrag && Event.current.button == 0)
-    //    {
-    //        // -- ATTEMPT TO MOVE ALL NODES IN A SELECTION IF WE ARE NOT ALREADY
-    //        bool haveASelectedNode = false;
-
-    //        if (!draggingSelectionRect)
-    //        {
-    //            foreach (Node n in m_Editor.CurrentBlueprint.nodes)
-    //            {
-    //                if (n.IsSelected)
-    //                {
-    //                    haveASelectedNode = true;
-
-    //                    n.position.x += /*mouseDownPos.x + */Event.current.delta.x;
-    //                    n.position.y += /*mouseDownPos.y + */Event.current.delta.y;
-    //                }
-    //            }
-    //        }
-
-    //        // -- OTHERWISE DRAG A SELECTION WINDOW AROUND NODES
-    //        if (!haveASelectedNode)
-    //        {
-    //            draggingSelectionRect = true;
-
-    //            // -- SET SELECTION RECT INITIAL X,Y
-    //            if (mouseDownPos.x > Event.current.mousePosition.x)
-    //            {
-    //                selectionRect.width = mouseDownPos.x - Event.current.mousePosition.x;
-    //                selectionRect.x = Event.current.mousePosition.x;
-    //            }
-    //            else
-    //            {
-    //                selectionRect.width = Event.current.mousePosition.x - mouseDownPos.x;
-    //                selectionRect.x = mouseDownPos.x;
-    //            }
-
-    //            if (mouseDownPos.y > Event.current.mousePosition.y)
-    //            {
-    //                selectionRect.height = mouseDownPos.y - Event.current.mousePosition.y;
-    //                selectionRect.y = Event.current.mousePosition.y;
-    //            }
-    //            else
-    //            {
-    //                selectionRect.height = Event.current.mousePosition.y - mouseDownPos.y;
-    //                selectionRect.y = mouseDownPos.y;
-    //            }
-
-    //            //Debug.Log("SELECTION RECT : " + selectionRect);
-
-    //            // -- IF INSIDE THE RECTANGLE, SELECT THE NODE
-    //            foreach (Node n in m_Editor.CurrentBlueprint.nodes)
-    //            {
-    //                if (selectionRect.Overlaps(n.position))
-    //                {
-    //                    n.Select(m_Editor.CurrentBlueprint);
-    //                }
-    //                else
-    //                {
-    //                    n.Deselect();
-    //                }
-    //            }
-    //        }
-    //    }
-    //    else if (Event.current.type == EventType.MouseUp && Event.current.button == 0)
-    //    {
-    //        draggingSelectionRect = false;
-    //        selectionRect = new Rect(0, 0, 0, 0);
-    //    }
-    //}
-    //
 
 
     void AddNodeCallback(object userData)
@@ -316,6 +203,14 @@ public class DraftArea : EditorWindow
         draftState = DraftState.Default;
     }
 
+    
+    void DeselectAllNodes()
+    {
+        for (int nLoop = 0; nLoop < m_Editor.CurrentBlueprint.nodes.Count; nLoop++)
+        {
+            m_Editor.CurrentBlueprint.nodes[nLoop].IsSelected = false;
+        }
+    }
 
     void DrawNodes()
     {
