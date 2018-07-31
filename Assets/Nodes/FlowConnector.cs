@@ -32,6 +32,17 @@ public class FlowConnector
         position = new Rect(0, 0, 10f, 20f);
     }
 
+
+    public void InitConnector(Node _node, FlowType _type, Action<FlowConnector> _OnDragConnector, Action<FlowConnector> _OnStopDragConnector)
+    {
+        node = _node;
+        flowType = _type;
+        OnDragConnector = _OnDragConnector;
+        OnStopDragConnector = _OnStopDragConnector;
+        position = new Rect(0, 0, 10f, 20f);
+    }
+
+
     public void Draw()
     {
         position.y = node.position.y + (node.position.height * 0.5f) - position.height * 0.5f;

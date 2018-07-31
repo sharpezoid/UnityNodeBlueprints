@@ -12,23 +12,13 @@ public class DraftArea : EditorWindow
 
     Vector2 mousePos;   // -- Mouse postion update by Event.current.mousePosition so we can have it during other event types...
 
-    private FlowConnector selectedOutPoint;
-    private FlowConnector selectedInPoint;
+    private FlowConnector dragOrigin;
+    private FlowConnector dragEnd;
 
     public void Init(BlueprintEditor _m_Editor)
     {
         m_Editor = _m_Editor;
     }
-
-    public enum DraftState
-    {
-        Default,
-        AddingNode,
-        SelectingArea,
-        DragginNodes,
-        COUNT
-    }
-    public DraftState draftState = DraftState.Default; 
 
     public void Draw()
     {
@@ -49,7 +39,7 @@ public class DraftArea : EditorWindow
         switch (e.type)
         {
             case EventType.MouseDown:
-                if (e.button == 1)
+                if (e.button == 1)      // -- RIGHT CLICK TO SHOW NODE SELECTION
                 {
                     mousePos = e.mousePosition;
                     GenericMenu menu = new GenericMenu();
@@ -81,14 +71,14 @@ public class DraftArea : EditorWindow
     public void OnDragConnector(FlowConnector outPoint)
     {
         Debug.Log("DRAG CONNECTOR!");
-        selectedOutPoint = outPoint;
+        dragOrigin = outPoint;
 
         // -- Deselect any nodes so as to not drag selected nodes...
         DeselectAllNodes();
 
-        if (selectedInPoint != null)
+        if (dragEnd != null)
         {
-            if (selectedOutPoint.node != selectedInPoint.node)
+            if (dragOrigin.node != dragEnd.node)
             {
                CreateConnection();
             }
@@ -101,7 +91,7 @@ public class DraftArea : EditorWindow
 
     public void OnStopDragConnector(FlowConnector outPoint)
     {
-        selectedOutPoint = null;
+        dragOrigin = null;
     }
 
 
@@ -112,7 +102,7 @@ public class DraftArea : EditorWindow
             m_Editor.CurrentBlueprint.connections = new List<FlowConnection>();
         }
 
-        m_Editor.CurrentBlueprint.connections.Add(new FlowConnection(selectedInPoint, selectedOutPoint, OnClickRemoveConnection));
+        m_Editor.CurrentBlueprint.connections.Add(new FlowConnection(dragEnd, dragOrigin, OnClickRemoveConnection));
     }
 
 
@@ -124,31 +114,31 @@ public class DraftArea : EditorWindow
 
     private void DrawConnectionLine(Event e)
     {
-        if (selectedInPoint != null && selectedOutPoint == null)
+        if (dragEnd != null && dragOrigin == null)
         {
             Handles.DrawBezier(
-                selectedInPoint.position.center,
+                dragEnd.position.center,
                 e.mousePosition,
-                selectedInPoint.position.center + Vector2.left * 50f,
+                dragEnd.position.center + Vector2.left * 50f,
                 e.mousePosition - Vector2.left * 50f,
                 Color.white,
                 null,
-                2f
+                5f
             );
 
             GUI.changed = true;
         }
 
-        if (selectedOutPoint != null && selectedInPoint == null)
+        if (dragOrigin != null && dragEnd == null)
         {
             Handles.DrawBezier(
-                selectedOutPoint.position.center,
+                dragOrigin.position.center,
                 e.mousePosition,
-                selectedOutPoint.position.center - Vector2.left * 50f,
+                dragOrigin.position.center - Vector2.left * 50f,
                 e.mousePosition + Vector2.left * 50f,
                 Color.white,
                 null,
-                2f
+                5f
             );
 
             GUI.changed = true;
@@ -198,8 +188,6 @@ public class DraftArea : EditorWindow
         m_Editor.CurrentBlueprint.nodes.Add(n);
 
         m_Editor.SaveCurrentBlueprint();
-
-        draftState = DraftState.Default;
     }
 
     

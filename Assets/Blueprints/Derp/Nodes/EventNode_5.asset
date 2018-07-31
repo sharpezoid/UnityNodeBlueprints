@@ -16,8 +16,8 @@ MonoBehaviour:
   sizeDelta: {x: 100, y: 100}
   position:
     serializedVersion: 2
-    x: 471
-    y: 260
+    x: 122
+    y: 446
     width: 100
     height: 100
   m_Editor: {fileID: 0}
