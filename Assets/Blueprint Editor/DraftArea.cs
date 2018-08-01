@@ -26,15 +26,14 @@ public class DraftArea : EditorWindow
         if (m_Editor.CurrentBlueprint == null) { return; }
 
         DrawNodes();
-
-        ProcessEvents(Event.current);
+        DrawConnections();
+        DrawCurrentDragConnection(Event.current);
+        ProcessDraftEvents(Event.current);
         ProcessNodeEvents(Event.current);
-
-        DrawConnectionLine(Event.current);
     }
 
 
-    private void ProcessEvents(Event e)
+    private void ProcessDraftEvents(Event e)
     {
         switch (e.type)
         {
@@ -82,15 +81,19 @@ public class DraftArea : EditorWindow
             {
                CreateConnection();
             }
-            else
-            {
 
-            }
         }
     }
 
-    public void OnStopDragConnector(FlowConnector outPoint)
+    public void OnStopDragConnector(FlowConnector inPoint)
     {
+        dragEnd = inPoint;
+        if (dragOrigin != null)
+        {
+            CreateConnection();
+        }
+
+        dragEnd = null;
         dragOrigin = null;
     }
 
@@ -102,17 +105,17 @@ public class DraftArea : EditorWindow
             m_Editor.CurrentBlueprint.connections = new List<FlowConnection>();
         }
 
-        m_Editor.CurrentBlueprint.connections.Add(new FlowConnection(dragEnd, dragOrigin, OnClickRemoveConnection));
+        m_Editor.CurrentBlueprint.connections.Add(new FlowConnection(dragEnd, dragOrigin));
     }
 
-
-    private void OnClickRemoveConnection(FlowConnection connection)
+    private void ClearConnection()
     {
-        m_Editor.CurrentBlueprint.connections.Remove(connection);
+        dragOrigin = null;
+        dragEnd = null;
     }
 
 
-    private void DrawConnectionLine(Event e)
+    private void DrawCurrentDragConnection(Event e)
     {
         if (dragEnd != null && dragOrigin == null)
         {
@@ -208,6 +211,16 @@ public class DraftArea : EditorWindow
             {
                 m_Editor.CurrentBlueprint.nodes[nLoop].Draw();
             }
+        }
+    }
+
+    void DrawConnections()
+    {
+        if (m_Editor.CurrentBlueprint.connections == null) { return; }
+
+        foreach(FlowConnection c in m_Editor.CurrentBlueprint.connections)
+        {
+            c.Draw();
         }
     }
 }

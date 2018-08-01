@@ -270,7 +270,7 @@ public class OpenBlueprintPopup : EditorWindow
         {
             if (GUILayout.Button(knownBlueprints[i].str_Name))
             {
-                m_Editor.CurrentBlueprint = knownBlueprints[i];
+                m_Editor.SetupBlueprint(knownBlueprints[i]);
                 this.Close();
             }
         }

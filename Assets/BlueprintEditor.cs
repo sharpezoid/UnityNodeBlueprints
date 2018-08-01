@@ -59,6 +59,15 @@ public class BlueprintEditor : EditorWindow
         BlueprintPlayer.Instance.InitEditor(this);
     }
 
+    public void SetupBlueprint(Blueprint _bp)
+    {
+        CurrentBlueprint = _bp;
+        foreach (Node n in CurrentBlueprint.nodes)
+        {
+            n.InitNodeEditor(n.position.position, n.nodeType, this);
+        }
+    }
+
     /// <summary>
     /// Handle selection of gameobjects in scene
     /// </summary>
