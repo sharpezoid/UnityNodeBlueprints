@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -13,11 +13,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeType: 1
   color: {r: 1, g: 0, b: 1, a: 1}
-  sizeDelta: {x: 100, y: 100}
+  sizeDelta: {x: 150, y: 100}
   position:
     serializedVersion: 2
-    x: 548
-    y: 65
-    width: 100
+    x: 1067
+    y: 262
+    width: 150
     height: 100
   m_Editor: {fileID: 0}

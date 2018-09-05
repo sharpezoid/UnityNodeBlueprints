@@ -15,7 +15,7 @@ public class Blueprint : ScriptableObject
     public List<Node> nodes = new List<Node>();
 
     [SerializeField]
-    public List<FlowConnection> connections = new List<FlowConnection>();
+    public List<Connection> connections = new List<Connection>();
 
     public Blueprint()
     {

@@ -15,11 +15,17 @@ public class Node : ScriptableObject
     public Color color = Color.magenta;
 
     //[HideInInspector]
-    public Vector2 sizeDelta = new Vector2(100, 100);
+    public Vector2 sizeDelta = new Vector2(150, 100);
 
     //[HideInInspector]
     public Rect position;
-    
+
+    //public List<Connector> connectors = new List<Connector>();
+    [System.NonSerialized]
+    public List<Connector> inputs = new List<Connector>();
+    [System.NonSerialized]
+    public List<Connector> outputs = new List<Connector>();
+
     //// -- node selection toggle
     private bool isSelected = false;
     private bool isDragged = false;

@@ -14,13 +14,7 @@ public class MenuBar : EditorWindow
 {
     BlueprintEditor m_Editor;
 
-    // -- Extra types for blueprint serialisation
-    Type[] extraTypes = { typeof(Node),
-                          typeof(CommentNode),
-                          typeof(VariableNode) };
-
     public const string bpLocation = "Assets/Blueprints";
-
 
     public void Init(BlueprintEditor _m_Editor)
     {
@@ -270,6 +264,13 @@ public class OpenBlueprintPopup : EditorWindow
         {
             if (GUILayout.Button(knownBlueprints[i].str_Name))
             {
+                if (m_Editor.CurrentBlueprint)
+                {
+                    Resources.UnloadAsset(m_Editor.CurrentBlueprint);
+                    m_Editor.CurrentBlueprint = null;
+                }
+                Resources.UnloadUnusedAssets();
+
                 m_Editor.SetupBlueprint(knownBlueprints[i]);
                 this.Close();
             }

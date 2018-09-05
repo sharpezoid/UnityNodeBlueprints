@@ -8,28 +8,26 @@ using System;
 [System.Serializable]
 public class EventNode : Node
 {
-    FlowConnector inPoint = null;
-    FlowConnector outPoint = null;
-
     public override void InitNodeEditor(Vector2 pos, NodeData.NodeType _type, BlueprintEditor _m_Editor)
     {
         base.InitNodeEditor(pos, _type, _m_Editor);
 
-        inPoint = new FlowConnector(this, FlowConnector.FlowType.Input, m_Editor.DraftArea.OnDragConnector, m_Editor.DraftArea.OnStopDragConnector);
-        outPoint = new FlowConnector(this, FlowConnector.FlowType.Output, m_Editor.DraftArea.OnDragConnector, m_Editor.DraftArea.OnStopDragConnector);
+        inputs.Add(new Connector(this, Connector.FlowType.Input));
+        outputs.Add(new Connector(this, Connector.FlowType.Output));
     }
 
     public override void Draw()
     {
         base.Draw();
 
-        if (inPoint != null)
+        for (int iLoop = 0; iLoop < inputs.Count; iLoop++)
         {
-            inPoint.Draw();
+            inputs[iLoop].Draw(iLoop);
         }
-        if (outPoint != null)
+
+        for (int oLoop = 0; oLoop < outputs.Count; oLoop++)
         {
-            outPoint.Draw();
+            outputs[oLoop].Draw(oLoop);
         }
     }
 }

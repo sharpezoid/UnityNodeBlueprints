@@ -135,5 +135,11 @@ public class BlueprintEditor : EditorWindow
                 SaveCurrentBlueprint();
             }
         }
+
+        Resources.UnloadAsset(currentBlueprint);
+        currentBlueprint = null;
+
+        // -- unload
+        Resources.UnloadUnusedAssets();
     }
 }
