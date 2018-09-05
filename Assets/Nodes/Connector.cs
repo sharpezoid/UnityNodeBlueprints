@@ -14,6 +14,10 @@ public class Connector
     protected Action<Connector> EndDrag;
     public int index;
     Rect rect;
+    public Vector2 GetPosition()
+    {
+        return rect.center;
+    }
 
     public enum FlowType
     {
@@ -55,7 +59,7 @@ public class Connector
         switch (e.type)
         {
             case EventType.MouseDown:
-                if (e.button == 0 && rect.Contains(e.mousePosition))
+                if (e.button == 0 && rect.Contains(e.mousePosition) && flowType == FlowType.Output)
                 {
                     if (OnDrag != null)
                     {
@@ -78,7 +82,7 @@ public class Connector
             case EventType.MouseUp:
                 if (e.button == 0 && rect.Contains(e.mousePosition))
                 {
-                    if (EndDrag != null)
+                    if (EndDrag != null && flowType == FlowType.Input)
                     {
                         EndDrag(this);
                     }

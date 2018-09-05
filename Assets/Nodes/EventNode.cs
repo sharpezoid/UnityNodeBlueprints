@@ -11,8 +11,8 @@ public class EventNode : Node
     public override void InitNodeEditor(Vector2 pos, NodeData.NodeType _type, BlueprintEditor _m_Editor)
     {
         base.InitNodeEditor(pos, _type, _m_Editor);
-
-        inputs.Add(new Connector(this, Connector.FlowType.Input));
+        
+        // -- ALL EVENTS HAVE AT LEAST ONE OUTPUT
         outputs.Add(new Connector(this, Connector.FlowType.Output));
     }
 

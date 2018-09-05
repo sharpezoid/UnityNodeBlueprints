@@ -12,23 +12,5 @@ MonoBehaviour:
   m_Name: Derp
   m_EditorClassIdentifier: 
   str_Name: Derp
-  nodes:
-  - {fileID: 11400000, guid: f051f6c5bf30c3444b01fa992fc4c27a, type: 2}
-  - {fileID: 11400000, guid: 2a202945fc0059340ad0e4324af8ce1f, type: 2}
-  connections:
-  - A:
-      node: {fileID: 11400000, guid: 2a202945fc0059340ad0e4324af8ce1f, type: 2}
-      index: 0
-      flowType: 0
-    B:
-      node: {fileID: 11400000, guid: f051f6c5bf30c3444b01fa992fc4c27a, type: 2}
-      index: 0
-      flowType: 1
-  - A:
-      node: {fileID: 11400000, guid: f051f6c5bf30c3444b01fa992fc4c27a, type: 2}
-      index: 0
-      flowType: 1
-    B:
-      node: {fileID: 11400000, guid: 2a202945fc0059340ad0e4324af8ce1f, type: 2}
-      index: 0
-      flowType: 0
+  nodes: []
+  connections: []

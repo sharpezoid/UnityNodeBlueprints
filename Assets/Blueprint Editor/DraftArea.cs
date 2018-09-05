@@ -13,7 +13,6 @@ public class DraftArea : EditorWindow
     Vector2 mousePos;   // -- Mouse postion update by Event.current.mousePosition so we can have it during other event types...
 
     static Connector dragOrigin;
-    //private Connector dragEnd;
 
     public void Init(BlueprintEditor _m_Editor)
     {
@@ -28,7 +27,7 @@ public class DraftArea : EditorWindow
         DrawNodes();
         DrawConnections();
 
-        //DrawCurrentDragConnection(Event.current);
+        DrawCurrentDragConnection(Event.current);
 
         ProcessDraftEvents(Event.current);
         ProcessNodeEvents(Event.current);
@@ -79,12 +78,12 @@ public class DraftArea : EditorWindow
         DeselectAllNodes();
     }
 
-    public static void OnStopDragConnector(Connector inPoint)
+    public static void OnStopDragConnector(Connector overPoint)
     {
         //dragEnd = inPoint;
-        if (dragOrigin != null && dragOrigin.Node != inPoint.Node && inPoint.flowType != dragOrigin.flowType)
+        if (dragOrigin != null && dragOrigin.Node != overPoint.Node && overPoint.flowType != dragOrigin.flowType)
         {
-            CreateConnection(inPoint, dragOrigin);
+            CreateConnection(overPoint, dragOrigin);
         }
 
         dragOrigin = null;
@@ -93,18 +92,24 @@ public class DraftArea : EditorWindow
 
     static void CreateConnection(Connector _out, Connector _in)
     {
-        Debug.Log("CREATIGN CONNECTION");
-        //if (m_Editor.CurrentBlueprint.connections == null)
-        //{
-        //    m_Editor.CurrentBlueprint.connections = new List<FlowConnection>();
-        //}
-
         ConnectionData A = new ConnectionData(_out.Node, _out.index, _out.flowType);
         ConnectionData B = new ConnectionData(_in.Node, _in.index, _in.flowType);
 
-        m_Editor.CurrentBlueprint.connections.Add(new Connection(A, B));
+        // -- Check it doesn't already exist.
+        bool exists = false;
+        foreach ( Connection c in m_Editor.CurrentBlueprint.connections)
+        {
+            if (c.A.node == A.node && c.A.index == A.index && c.B.node == B.node && c.B.index == B.index)
+            {
+                exists = true;
+                continue;
+            }
+        }
 
-        //m_Editor.CurrentBlueprint.connections.Add(new FlowConnection(dragEnd, dragOrigin));
+        if (!exists)
+        {
+            m_Editor.CurrentBlueprint.connections.Add(new Connection(A, B));
+        }
     }
 
     private void ClearConnection()
@@ -114,38 +119,21 @@ public class DraftArea : EditorWindow
     }
 
 
-    //private void DrawCurrentDragConnection(Event e)
-    //{
-    //    if (dragEnd != null && dragOrigin == null)
-    //    {
-    //        Handles.DrawBezier(
-    //            dragEnd.position.center,
-    //            e.mousePosition,
-    //            dragEnd.position.center + Vector2.left * 50f,
-    //            e.mousePosition - Vector2.left * 50f,
-    //            Color.white,
-    //            null,
-    //            5f
-    //        );
-
-    //        GUI.changed = true;
-    //    }
-
-    //    if (dragOrigin != null && dragEnd == null)
-    //    {
-    //        Handles.DrawBezier(
-    //            dragOrigin.position.center,
-    //            e.mousePosition,
-    //            dragOrigin.position.center - Vector2.left * 50f,
-    //            e.mousePosition + Vector2.left * 50f,
-    //            Color.white,
-    //            null,
-    //            5f
-    //        );
-
-    //        GUI.changed = true;
-    //    }
-    //}
+    private void DrawCurrentDragConnection(Event e)
+    {
+        if (dragOrigin != null)
+        {
+            Handles.DrawBezier(
+                dragOrigin.GetPosition(),
+                e.mousePosition,
+                dragOrigin.GetPosition() - Vector2.left * 50f,
+                e.mousePosition + Vector2.left * 50f,
+                Color.white,
+                null,
+                5f
+            );
+        }
+    }
 
 
     void AddNodeCallback(object userData)
