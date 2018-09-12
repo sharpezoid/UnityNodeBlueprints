@@ -1,5 +1,4 @@
 # UnityNodeBlueprints
 
-// Coming soon - Tool Package Download
-
-Project to develop a skeleton node system for Unity that can be extended to suit specific requirements, inspired by Unreal Blueprints.
+// Ending current development as there are better tools out there already.
+// Converting into a behaviour tree system instead for use in Cult Life
